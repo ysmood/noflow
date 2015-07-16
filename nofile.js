@@ -2,13 +2,15 @@
 
 var kit = require("nokit");
 
-module.exports = function (task) {
-    task("default", "run test", function () {
+module.exports = function (task, option) {
+    option("-n <basic>", "example name", "basic");
+
+    task("default", "run test", function (opts) {
         kit.monitorApp({
             bin: "babel-node",
             args: [
-                "--optional", "es7.asyncFunctions",
-                "example/basic.js"
+                "examples/" + opts.N,
+                "--optional", "es7.asyncFunctions"
             ]
         });
     });

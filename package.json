@@ -1,14 +1,15 @@
 {
-  "name": "flow",
-  "version": "0.0.1",
-  "description": "Nothing more than a function.",
+  "name": "noflow",
+  "version": "0.0.4",
+  "description": "A minimal router for the future.",
   "main": "index.js",
   "scripts": {
+    "no": "no",
     "test": "no test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ysmood/flow"
+    "url": "https://github.com/ysmood/noflow"
   },
   "keywords": [
     "api",
@@ -18,7 +19,7 @@
     "promise",
     "async",
     "await",
-    "es6"
+    "es7"
   ],
   "author": "http://ysmood.org",
   "license": "MIT",
@@ -27,9 +28,21 @@
   },
   "homepage": "https://github.com/ysmood/flow",
   "dependencies": {
-    "nokit": "^0.9.1"
+    "nokit": "^0.9.2"
   },
   "devDependencies": {
-    "babel": "^5.6.14"
+    "babel": "*",
+    "babel-eslint": "*"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    },
+    "rules": {
+      "strict": 0
+    }
   }
 }
