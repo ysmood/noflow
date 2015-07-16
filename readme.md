@@ -9,10 +9,10 @@ functions, they can be easily composed with each other.
 
 To use noflow, you only have to remember a single rule "Any async function should and will return a Promise.".
 
-For example goto [examples](examples).
+For examples, goto [examples](examples).
 
-To run the examples, you have to install the `npm i -g babel`, for
-example, to run [examples/basic.js](examples/basic.js), use
+To run the examples, you have to install the babeljs: `npm i -g babel`.
+Such as, to run the [examples/basic.js](examples/basic.js), use command like:
 `babel-node --optional es7.asyncFunctions examples/basic.js`
 
 
