@@ -81,8 +81,9 @@ app.listen(8123);
 
 ### `flow(opts)`
 
-It returns an array, with some extra members: `server` and `listen`. The array
-will hold all the routes. It's just this simple, nothing fancy.
+It returns an array, with some extra members: `server` and `listen`,
+they are the same within the node native `http.Server` and `http.Server.prototype.listen`.
+The array will hold all the routes. It's just this simple, nothing fancy.
 
 For API details goto [API](https://github.com/ysmood/nokit#flowmiddlewares-opts).
 
