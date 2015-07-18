@@ -1,5 +1,3 @@
-### This project is on its very early stage, it's not ready for production. PR and issue are welcomed.
-
 # NoFlow
 
 A minimal router for the future.
