@@ -7,8 +7,12 @@ var flow = kit.require("proxy").flow;
 module.exports = function (opts) {
     var routes = [];
 
-    routes.server = http.createServer(flow(routes, opts));
-    routes.listen = routes.server.listen.bind(routes.server);
+    routes.listener = flow(routes, opts);
+
+    routes.listen = function () {
+        routes.server = http.createServer(routes.listener);
+        routes.server.listen.apply(routes.server, arguments);
+    };
 
     return routes;
 };
