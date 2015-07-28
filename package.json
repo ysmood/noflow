@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A minimal router for the future.",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/ysmood/flow",
   "dependencies": {
-    "nokit": "^0.9.2"
+    "nokit": "0.9.3"
   },
   "devDependencies": {
     "babel": "*",
