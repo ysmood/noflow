@@ -2,7 +2,8 @@
 
 var http = require("http");
 var kit = require("nokit");
-var flow = kit.require("proxy").flow;
+var proxy = kit.require("proxy");
+var flow = proxy.flow;
 
 module.exports = function (opts) {
     var routes = [];
@@ -16,3 +17,5 @@ module.exports = function (opts) {
 
     return routes;
 };
+
+module.exports.midToFlow = proxy.midToFlow;
