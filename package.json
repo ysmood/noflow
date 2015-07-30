@@ -33,7 +33,8 @@
   "devDependencies": {
     "babel": "*",
     "babel-eslint": "*",
-    "body-parser": "1.13.2"
+    "body-parser": "1.13.2",
+    "path-to-regexp": "^1.2.0"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
