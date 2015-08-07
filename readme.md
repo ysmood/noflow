@@ -32,7 +32,7 @@ app.listen(8123);
 
 ### ES5
 
-Without ES7, you can still have all the good staffs of Noflow.
+Without ES7, you can still have all the good stuffs of Noflow.
 
 ```javascript
 var flow = require("noflow");
