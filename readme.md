@@ -25,6 +25,8 @@ import flow from "noflow";
 
 let app = flow();
 
+// Everything pushed into the app will be converted to a
+// middleware object sanely, even it's a string, buffer or anything else.
 app.push("hello world");
 
 app.listen(8123);
