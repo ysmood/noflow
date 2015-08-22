@@ -2,7 +2,7 @@ import flow from "../index";
 
 let app = flow();
 
-app.push(async (ctx) => {
+app.push(async ctx => {
     try {
         await ctx.next();
     } catch (e) {

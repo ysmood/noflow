@@ -11,7 +11,7 @@ app.push({
     handler: { a: 10 }
 }, {
     url: "/stream",
-    handler: (ctx) => ctx.body = kit.createReadStream("index.js")
+    handler: ctx => ctx.body = kit.createReadStream("index.js")
 }, {
     url: "/promise-ctx",
     handler: kit.readJson("package.json")

@@ -5,7 +5,7 @@ let app = flow();
 
 app.push(
     flow.midToFlow(bodyParser.json()),
-    (ctx) => {
+    ctx => {
         ctx.body = ctx.req.body;
     }
 );

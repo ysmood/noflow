@@ -2,15 +2,15 @@ var flow = require("../index");
 var app = flow();
 
 // log time
-app.push(function (ctx) {
+app.push(ctx => {
     var start = new Date();
-    return ctx.next().then(function () {
+    return ctx.next().then(() => {
         console.log(new Date() - start);
     });
 });
 
 // response
-app.push(function (ctx) {
+app.push(ctx => {
     ctx.body = "hello world";
 });
 

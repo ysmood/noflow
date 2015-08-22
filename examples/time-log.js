@@ -21,7 +21,7 @@ app.push(async ({ req: { method, url }, next }) => {
 });
 
 // response
-app.push((ctx) => {
+app.push(ctx => {
     ctx.body = "hello world";
 });
 

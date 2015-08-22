@@ -41,19 +41,15 @@ var flow = require("noflow");
 
 var app = flow();
 
-app.push(
+app.push(function (ctx) {
+    return ctx.next().then(function () {
+        console.log("done");
+    });
+});
 
-    function (ctx) {
-        return ctx.next().then(function () {
-            console.log("done");
-        });
-    },
-
-    function (ctx) {
-        ctx.body = "hello world";
-    },
-
-);
+app.push(function (ctx) {
+    ctx.body = "hello world";
+});
 
 app.listen(8123);
 ```
@@ -74,7 +70,7 @@ app.push(
         console.log("done");
     },
 
-    (ctx) => ctx.body = "hello world"
+    ctx => ctx.body = "hello world"
 
 );
 
@@ -114,7 +110,7 @@ app.push({
     handler: kit.readJson("a.json") // readJson returns a Promise
 }, {
     url: "/b",
-    handler: async (ctx) => {
+    handler: async ctx => {
         let txt = await kit.readFile("b.txt");
         let data = await kit.request(`http://test.com/${ctx.url}`);
         ctx.body = txt + data;
