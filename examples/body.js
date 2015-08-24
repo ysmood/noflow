@@ -4,6 +4,11 @@ import kit from "nokit";
 let app = flow();
 
 app.push(ctx => {
+    // "ctx.body" can be any line below, noflow will unbox the typed value sanely.
+
+    // string
+    ctx.body = "OK";
+
     // json
     ctx.body = { a: 10 };
 
