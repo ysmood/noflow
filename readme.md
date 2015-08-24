@@ -102,20 +102,22 @@ For example you can use them seamlessly:
 ```js
 import flow from "noflow";
 import kit from "nokit";
+let { select } = kit.require("proxy");
 
 let app = flow();
 
-app.push({
-    url: "/a",
-    handler: kit.readJson("a.json") // readJson returns a Promise
-}, {
-    url: "/b",
-    handler: async ctx => {
+app.push(
+    select(
+        { url: "/a" },
+        kit.readJson("a.json") // readJson returns a Promise})
+    ),
+
+    select({ url: "/b" }, async ctx => {
         let txt = await kit.readFile("b.txt");
         let data = await kit.request(`http://test.com/${ctx.url}`);
         ctx.body = txt + data;
-    }
-});
+    })
+);
 
 app.listen(8123);
 ```

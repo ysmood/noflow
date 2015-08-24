@@ -1,17 +1,18 @@
 import flow from "../index";
+import kit from "nokit";
 let { parse } = require("url");
+let { select } = kit.require("proxy");
 
 let app = flow();
 
-app.push({
+app.push(
     // Such as "/path?id=10&name=jack"
-    url: "/path",
-    handler: ctx => {
+    select({ url: "/path" }, ctx => {
         let url = parse(ctx.req.url, true);
         // Here the body will be "10 - jack".
         ctx.body = `${url.query.id} - ${url.query.name}`;
-    }
-});
+    })
+);
 
 // Or you can create a middleware to parse query string for all followed middlewares.
 app.push(async ctx => {
