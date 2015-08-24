@@ -109,7 +109,7 @@ let app = flow();
 app.push(
     select(
         { url: "/a" },
-        kit.readJson("a.json") // readJson returns a Promise})
+        kit.readJson("a.json") // readJson returns a Promise
     ),
 
     select({ url: "/b" }, async ctx => {

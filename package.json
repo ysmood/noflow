@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A minimal router for the future.",
   "main": "index.js",
   "scripts": {
