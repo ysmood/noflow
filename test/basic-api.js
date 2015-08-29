@@ -6,8 +6,7 @@ var flow = require("../lib/flow");
 var ken = kit.require("ken");
 var it = ken();
 
-it.sync([
-
+it.async([
     it("should proxy flow handler", () => {
         var server = http.createServer(flow([echoData]));
         var listener = kit.promisify(server.listen, server);
@@ -41,7 +40,9 @@ it.sync([
             server.close();
         }, (e) => { server.close(); throw e; });
     })
-]);
+]).then(({ failed }) => {
+    process.exit(failed);
+});
 
 function echoData (ctx) {
     return new Promise((fulfill) => {
