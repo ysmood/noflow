@@ -3,7 +3,7 @@
 var http = require("http");
 var kit = require("nokit");
 var proxy = kit.require("proxy");
-var flow = proxy.flow;
+var flow = require('./lib/flow');
 
 module.exports = function (opts) {
     var routes = [];

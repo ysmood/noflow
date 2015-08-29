@@ -14,4 +14,14 @@ module.exports = function (task, option) {
             ]
         });
     });
+
+    task("test-api", "run test api", function (opts) {
+        kit.monitorApp({
+            bin: "babel-node",
+            args: [
+                "test/" + opts.N,
+                "whitelist", "es7.asyncFunctions es6.templateLiterals es6.destructuring es6.arrowFunctions"
+            ]
+        });
+    });
 };

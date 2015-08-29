@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/ysmood/flow",
   "dependencies": {
+    "yaku": "latest",
     "nokit": "0.9.4"
   },
   "devDependencies": {
