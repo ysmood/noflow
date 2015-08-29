@@ -84,8 +84,8 @@ app.listen(8123);
 
 It returns an array, with some extra members:
 
-- `server`: The Node native `http.Server`,
-- `listen`: The Node native `http.Server.prototype.listen`
+- `server`: The Node native `http.Server`.
+- `listen`: Same with the Node native `http.Server.prototype.listen`, but returns a promise instead.
 - `listener`: The http `requestListener` of the Node native `http.createServer`.
 - `midToFlow (fn) -> fn`: Convert a `express.js` lick middleware to a NoFlow handler.
 
@@ -120,5 +120,7 @@ app.push(
     })
 );
 
-app.listen(8123);
+app.listen(8123).then(() => {
+    kit.request('127.0.0.1:8123/a').then(kit.logs);
+});
 ```
