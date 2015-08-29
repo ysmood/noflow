@@ -1,13 +1,17 @@
 "use strict";
 
 var kit = require("nokit");
+var _ = kit._;
+var br = kit.require("brush");
 
 module.exports = function (task, option) {
-    function enableES7 (args) {
-        return [
-            "--optional",
-            "es7.asyncFunctions"
-        ].concat(args);
+    var enableES7 = _.curry(_.union, 2)(["--optional", "es7.asyncFunctions"]);
+
+    option("-t <test/**/*.js>", "unit test filter", "test/**/*.js");
+    function test (patterns) {
+        return kit.async(kit.globSync(patterns).map(function (path) {
+            return kit.spawn("babel-node", enableES7([path]));
+        }));
     }
 
     option("-n <examples/basic>", "example file name", "examples/basic");
@@ -19,12 +23,12 @@ module.exports = function (task, option) {
         });
     });
 
-    task("watch-test", "run & watch test api", function () {
-        kit.watchDir("test", {
-            patterns: "test/**/*.js",
-            handler: function (type, path) {
-                if (type === "delete") return;
-                kit.spawn("babel-node", enableES7([path]));
+    task("watch-test", ["test"], "run & watch test api", function (opts) {
+        kit.watchFiles("{test,lib}/**/*.js", {
+            handler: function (path, curr, prev, isDel) {
+                kit.logs(br.cyan("modifed:"), path);
+                kit.logs(br.cyan("***** run unit tests *****"));
+                if (!isDel) test(opts.T).catch(_.noop);
             }
         });
     });
@@ -49,9 +53,9 @@ module.exports = function (task, option) {
         ]);
     });
 
-    task("test", ["lint"], "run test once", function () {
-        return kit.globSync("test/**/*.js").map(function (path) {
-            return kit.spawn("babel-node", enableES7([path]));
+    task("test", ["lint"], "run test once", function (opts) {
+        test(opts.T).catch(function (res) {
+            process.exit(res.code);
         });
     });
 };
