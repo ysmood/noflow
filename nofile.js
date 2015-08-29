@@ -44,7 +44,7 @@ module.exports = function (task, option) {
         }; }
 
         return kit.async([
-            // kit.warp("{examples,test}/**/*.js").load(lint(true)).run()
+            kit.warp("{examples,test}/**/*.js").load(lint(true)).run(),
             kit.warp("lib/**/*.js").load(lint(false)).run()
         ]);
     });
