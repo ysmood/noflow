@@ -11,6 +11,7 @@
     "type": "git",
     "url": "https://github.com/ysmood/noflow"
   },
+  "files": ["lib"],
   "keywords": [
     "api",
     "app",
@@ -31,12 +32,12 @@
     "yaku": "latest"
   },
   "devDependencies": {
-    "eslint": "1.3.0",
+    "eslint": "latest",
     "nokit": "latest",
     "babel": "latest",
     "babel-eslint": "latest",
-    "body-parser": "1.13.2",
-    "path-to-regexp": "^1.2.0"
+    "body-parser": "latest",
+    "path-to-regexp": "latest"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
