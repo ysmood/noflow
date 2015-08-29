@@ -80,86 +80,13 @@ app.listen(8123);
 
 # API
 
-- ## **[noflow](src/index.js?source#L23)**
+<%= doc['src/index.js'] %>
 
-    Create an array instance with some handy server helper methods.
+<%= doc['src/flow.js'] %>
 
-    - **<u>type</u>**: { _Array_ }
+<%= doc['src/middlewares.js'] %>
 
-        Members:
-        ```js
-        {
-            server: http.Server,
-
-            // http.Server.prototype.listen, but returns a promise instead.
-            listen: (port) => Promise,
-
-            // The http `requestListener` of the Node native `http.createServer`.
-            listener: (req ,res) => undefined
-        }
-        ```
-
-
-
-- ## **[flow(middlewares)](src/flow.js?source#L36)**
-
-    A promise based middlewares proxy.
-
-    - **<u>param</u>**: `middlewares` { _Array_ }
-
-        Each item is a function `(ctx) => Promise | Any`,
-        or an object with the same type with `body`.
-        If the middleware has async operation inside, it should return a promise.
-        The promise can reject an error with a http `statusCode` property.
-        The members of `ctx`:
-        ```coffee
-        {
-            # It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
-            body: Any,
-
-            req: http.IncomingMessage,
-
-            res: http.IncomingMessage,
-
-            # It returns a promise which settles after all the next middlewares are setttled.
-            next: => Promise
-        }
-        ```
-
-    - **<u>return</u>**: { _Function_ }
-
-        `(req, res) => Promise | Any` or `(ctx) => Promise`.
-        The http request listener or middleware.
-
-
-
-- ## **[midToFlow(h)](src/middlewares.js?source#L12)**
-
-    Convert a Express-like middleware to `proxy.flow` middleware.
-
-    - **<u>param</u>**: `h` { _Function_ }
-
-        `(req, res, next) =>`
-
-    - **<u>return</u>**: { _Function_ }
-
-        `(ctx) => Promise`
-
-
-
-- ## **[Promise](src/utils.js?source#L12)**
-
-    The promise class that noflow uses: [Yaku](https://github.com/ysmood/yaku)
-
-    - **<u>type</u>**: { _Object_ }
-
-- ## **[yutils](src/utils.js?source#L18)**
-
-    The promise helpers: [Yaku Utils](https://github.com/ysmood/yaku#utils)
-
-    - **<u>type</u>**: { _Object_ }
-
-
+<%= doc['src/utils.js'] %>
 
 # [NoKit](https://github.com/ysmood/nokit)
 

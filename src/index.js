@@ -5,6 +5,21 @@ import flow from "./flow";
 import utils from "./utils";
 import middlewares from "./middlewares";
 
+/**
+ * Create an array instance with some handy server helper methods.
+ * @type {Array} Members:
+ * ```js
+ * {
+ *     server: http.Server,
+ *
+ *     // http.Server.prototype.listen, but returns a promise instead.
+ *     listen: (port) => Promise,
+ *
+ *     // The http `requestListener` of the Node native `http.createServer`.
+ *     listener: (req ,res) => undefined
+ * }
+ * ```
+ */
 var noflow = (opts) => {
     var routes = [];
 
@@ -23,5 +38,6 @@ var noflow = (opts) => {
 
 noflow.flow = flow;
 utils.assign(noflow, middlewares);
+utils.assign(noflow, utils);
 
 export default noflow;

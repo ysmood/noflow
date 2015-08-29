@@ -23,7 +23,14 @@ module.exports = function (task, option) {
         });
     });
 
-    task("build", "build src from es6 to es5", function () {
+    task("build-docs", "build readme.md", function () {
+        return kit.warp("src/**/*.js")
+        .load(
+            kit.drives.comment2md({ h: 2, tpl: "doc/readme.jst.md" })
+        ).run();
+    });
+
+    task("build", ["build-docs"], "build src from es6 to es5", function () {
         return kit.spawn("babel", ["src", "--out-dir", "lib"]);
     });
 

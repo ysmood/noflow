@@ -11,9 +11,27 @@ import Stream from "stream";
 var { Promise, isFunction } = utils;
 
 /**
- * @param {Array} [middlewares] Each item is a function `(ctx) -> Promise | Any`
+ * A promise based middlewares proxy.
+ * @param  {Array} middlewares Each item is a function `(ctx) => Promise | Any`,
  * or an object with the same type with `body`.
- * @return {Function} a requestListener
+ * If the middleware has async operation inside, it should return a promise.
+ * The promise can reject an error with a http `statusCode` property.
+ * The members of `ctx`:
+ * ```coffee
+ * {
+ *     # It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
+ *     body: Any,
+ *
+ *     req: http.IncomingMessage,
+ *
+ *     res: http.IncomingMessage,
+ *
+ *     # It returns a promise which settles after all the next middlewares are setttled.
+ *     next: => Promise
+ * }
+ * ```
+ * @return {Function} `(req, res) => Promise | Any` or `(ctx) => Promise`.
+ * The http request listener or middleware.
  */
 var flow = (middlewares) => (req, res) => {
     var ctx, parentNext;
@@ -159,7 +177,4 @@ function error404 (ctx) {
     ctx.body = http.STATUS_CODES[404];
 }
 
-/**
- * expose the flow
- */
 export default flow;
