@@ -1,4 +1,4 @@
-var flow = require("../index");
+var flow = require("../src");
 var app = flow();
 
 // log time

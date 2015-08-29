@@ -1,4 +1,4 @@
-import flow from "../index";
+import flow from "../src";
 import bodyParser from "body-parser";
 
 let app = flow();

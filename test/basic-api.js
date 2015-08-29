@@ -1,5 +1,5 @@
 import testSuit from "./test-suit";
-import flow from "../lib/flow";
+import flow from "../src/flow";
 
 let {
     it, servant, request, eq, exit

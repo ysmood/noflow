@@ -23,6 +23,10 @@ module.exports = function (task, option) {
         });
     });
 
+    task("build", "build src from es6 to es5", function () {
+        return kit.spawn("babel", ["src", "--out-dir", "lib"]);
+    });
+
     task("watch-test", ["test"], "run & watch test api", function (opts) {
         kit.watchFiles("{test,lib}/**/*.js", {
             handler: function (path, curr, prev, isDel) {
@@ -34,23 +38,12 @@ module.exports = function (task, option) {
     });
 
     task("lint", "lint all code of this project", function () {
-        function lint (isES6) { return function (f) {
+        function lint (f) {
             f.set(null);
-            if (isES6) {
-                return kit.spawn("eslint", [f.path]);
-            } else {
-                return kit.spawn("eslint", [
-                    "-c", "es5lintrc.json",
-                    "--no-eslintrc",
-                    f.path
-                ]);
-            }
-        }; }
+            return kit.spawn("eslint", [f.path]);
+        }
 
-        return kit.async([
-            kit.warp("{examples,test}/**/*.js").load(lint(true)).run(),
-            kit.warp("lib/**/*.js").load(lint(false)).run()
-        ]);
+        return kit.warp("{examples,src,test}/**/*.js").load(lint).run();
     });
 
     task("test", ["lint"], "run test once", function (opts) {

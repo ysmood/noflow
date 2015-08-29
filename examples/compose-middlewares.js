@@ -1,4 +1,4 @@
-import flow from "../index";
+import flow from "../src";
 import { parse } from "url";
 import kit from "nokit";
 let { select } = kit.require("proxy");

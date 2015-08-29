@@ -1,51 +1,44 @@
 "use strict";
 
-var Promise = require("yaku"),
-    http = require("http"),
-    Stream = require("stream");
-
-/**
- * expose the flow
+/*
+    For the sake of performance don't use `let` key word here.
  */
-exports = module.exports = flow;
+
+import Promise from "yaku";
+import http from "http";
+import Stream from "stream";
 
 /**
  * @param {Array} [middlewares] Each item is a function `(ctx) -> Promise | Any`
  * or an object with the same type with `body`.
  * @return {Function} a requestListener
  */
-function flow (middlewares) { return function (req, res) {
-    var ctx, next;
+var flow = (middlewares) => (req, res) => {
+    var ctx, parentNext;
 
+    // If it comes from a http listener, else it comes from a sub noflow.
     if (res) {
-        // request, response paired listener
-        ctx = {
-            req: req,
-            res: res,
-            body: null
-        };
+        ctx = { req: req, res: res, body: null };
     } else {
         ctx = req;
+        parentNext = ctx.next;
 
         req = ctx.req;
         res = ctx.res;
-
-        next = ctx.next;
     }
 
     var index = 0;
 
     // Wrap the next middleware.
-    ctx.next = function () {
+    ctx.next = () => {
         var mid = middlewares[index++];
         if (mid === undefined) {
-            if (next) {
-                ctx.next = next;
+            // TODO: #4
+            if (parentNext) {
+                ctx.next = parentNext;
                 return ctx.next();
             } else {
-                // TODO: #4
-                error404(ctx);
-                return Promise.resolve();
+                return Promise.resolve(error404(ctx));
             }
         }
 
@@ -64,22 +57,21 @@ function flow (middlewares) { return function (req, res) {
     var promise = ctx.next();
 
     // The root middleware will finnally end the entire ctx peacefully.
-    if (!next) {
-        promise = promise.then(function () {
-            endCtx(ctx);
-        }, function (err) {
-            errorAndEndCtx(err, ctx);
-        });
+    if (!parentNext) {
+        return promise.then(
+            () => endCtx(ctx),
+            err => errorAndEndCtx(err, ctx)
+        );
     }
 
     return promise;
-}; }
+};
 
 // Convert anything to a middleware function.
 function ensureMid (mid) {
     if (isFunction(mid)) return mid;
 
-    return function (ctx) { ctx.body = mid; };
+    return ctx => { ctx.body = mid; };
 }
 
 // for better performance, hack v8.
@@ -161,10 +153,15 @@ function errorAndEndCtx (err, ctx) {
         ctx.body = err + "";
 
     // end the context
-    endCtx(ctx);
+    return endCtx(ctx);
 }
 
 function error404 (ctx) {
     ctx.res.statusCode = 404;
     ctx.body = http.STATUS_CODES[404];
 }
+
+/**
+ * expose the flow
+ */
+export default flow;

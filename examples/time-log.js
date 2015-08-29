@@ -1,4 +1,4 @@
-import flow from "../index";
+import flow from "../src";
 let app = flow();
 
 let timeSpan = () => {

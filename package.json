@@ -2,10 +2,11 @@
   "name": "noflow",
   "version": "0.1.0",
   "description": "A minimal router for the future.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "no": "no",
-    "test": "no test"
+    "test": "no test",
+    "prepublish": "no build"
   },
   "repository": {
     "type": "git",
