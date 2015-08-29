@@ -13,6 +13,7 @@ To run the examples, you have to install the babeljs: `npm i -g babel`.
 Such as, to run the [examples/basic.js](examples/basic.js), use command like:
 `babel-node --optional es7.asyncFunctions examples/basic.js`
 
+[![NPM version](https://badge.fury.io/js/noflow.svg)](http://badge.fury.io/js/noflow) [![Build Status](https://travis-ci.org/ysmood/noflow.svg)](https://travis-ci.org/ysmood/noflow) [![Build status](https://ci.appveyor.com/api/projects/status/github/ysmood/noflow?svg=true)](https://ci.appveyor.com/project/ysmood/noflow) [![Deps Up to Date](https://david-dm.org/ysmood/noflow.svg?style=flat)](https://david-dm.org/ysmood/noflow)
 
 # Quick Start
 
