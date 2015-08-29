@@ -31,9 +31,10 @@
     "yaku": "latest"
   },
   "devDependencies": {
-    "nokit": "0.11.0",
-    "babel": "*",
-    "babel-eslint": "*",
+    "eslint": "1.3.0",
+    "nokit": "latest",
+    "babel": "latest",
+    "babel-eslint": "latest",
     "body-parser": "1.13.2",
     "path-to-regexp": "^1.2.0"
   },
@@ -50,12 +51,10 @@
       "no-console": [0]
     },
     "env": {
+      "es6": true,
       "browser": true,
-      "node": true,
-      "es6": true
+      "node": true
     },
-    "rules": {
-      "strict": 0
-    }
+    "extends": "eslint:recommended"
   }
 }
