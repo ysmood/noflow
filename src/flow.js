@@ -4,9 +4,11 @@
     For the sake of performance don't use `let` key word here.
  */
 
-import Promise from "yaku";
+import utils from "./utils";
 import http from "http";
 import Stream from "stream";
+
+var { Promise, isFunction } = utils;
 
 /**
  * @param {Array} [middlewares] Each item is a function `(ctx) -> Promise | Any`
@@ -82,10 +84,6 @@ function tryMid (fn, ctx) {
         tryMid.err = err;
         return tryMid;
     }
-}
-
-function isFunction (value) {
-    return typeof value === "function";
 }
 
 function endRes (ctx, data, isStr) {

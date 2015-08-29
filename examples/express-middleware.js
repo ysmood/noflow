@@ -1,10 +1,10 @@
-import flow from "../src";
+import noflow from "../src";
 import bodyParser from "body-parser";
 
-let app = flow();
+let app = noflow();
 
 app.push(
-    flow.midToFlow(bodyParser.json()),
+    noflow.midToFlow(bodyParser.json()),
     ctx => {
         ctx.body = ctx.req.body;
     }

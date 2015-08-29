@@ -1,6 +1,6 @@
-import flow from "../src";
+import noflow from "../src";
 
-let app = flow();
+let app = noflow();
 
 app.push("hello world");
 

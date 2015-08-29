@@ -1,5 +1,5 @@
-import flow from "../src";
-let app = flow();
+import noflow from "../src";
+let app = noflow();
 
 let timeSpan = () => {
     let start = new Date();

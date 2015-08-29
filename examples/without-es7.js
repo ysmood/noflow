@@ -1,5 +1,5 @@
-var flow = require("../src");
-var app = flow();
+var noflow = require("../src");
+var app = noflow();
 
 // log time
 app.push(ctx => {

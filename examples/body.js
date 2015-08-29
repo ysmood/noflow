@@ -1,7 +1,7 @@
-import flow from "../src";
+import noflow from "../src";
 import kit from "nokit";
 
-let app = flow();
+let app = noflow();
 
 app.push(ctx => {
     // "ctx.body" can be any line below, noflow will unbox the typed value sanely.

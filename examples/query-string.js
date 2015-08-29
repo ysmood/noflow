@@ -1,9 +1,9 @@
-import flow from "../src";
+import noflow from "../src";
 import kit from "nokit";
 let { parse } = require("url");
 let { select } = kit.require("proxy");
 
-let app = flow();
+let app = noflow();
 
 app.push(
     // Such as "/path?id=10&name=jack"
