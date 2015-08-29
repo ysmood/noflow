@@ -28,9 +28,10 @@
   },
   "homepage": "https://github.com/ysmood/flow",
   "dependencies": {
-    "nokit": "0.11.0"
+    "yaku": "latest"
   },
   "devDependencies": {
+    "nokit": "0.11.0",
     "babel": "*",
     "babel-eslint": "*",
     "body-parser": "1.13.2",
