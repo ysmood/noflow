@@ -10,11 +10,12 @@ module.exports = function (task, option) {
         ].concat(args);
     }
 
-    option("-n <basic>", "example file name", "basic");
+    option("-n <examples/basic>", "example file name", "examples/basic");
     task("default", "run an example", function (opts) {
         kit.monitorApp({
             bin: "babel-node",
-            args: enableES7(["examples/" + opts.N])
+            args: enableES7([opts.N]),
+            watchList: ["examples/**/*.js", "lib/**/*.js"]
         });
     });
 
@@ -29,12 +30,23 @@ module.exports = function (task, option) {
     });
 
     task("lint", "lint all code of this project", function () {
-        function lint (f) {
+        function lint (isES6) { return function (f) {
             f.set(null);
-            return kit.spawn("eslint", [f.path]);
-        }
+            if (isES6) {
+                return kit.spawn("eslint", [f.path]);
+            } else {
+                return kit.spawn("eslint", [
+                    "-c", "es5lintrc.json",
+                    "--no-eslintrc",
+                    f.path
+                ]);
+            }
+        }; }
 
-        return kit.warp("{examples,lib,test}/**/*.js").load(lint).run();
+        return kit.async([
+            // kit.warp("{examples,test}/**/*.js").load(lint(true)).run()
+            kit.warp("lib/**/*.js").load(lint(false)).run()
+        ]);
     });
 
     task("test", ["lint"], "run test once", function () {
