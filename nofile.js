@@ -19,7 +19,7 @@ module.exports = function (task, option) {
         kit.monitorApp({
             bin: "babel-node",
             args: enableES7([opts.N]),
-            watchList: ["examples/**/*.js", "lib/**/*.js"]
+            watchList: ["examples/**/*.js", "src/**/*.js"]
         });
     });
 
@@ -35,7 +35,7 @@ module.exports = function (task, option) {
     });
 
     task("watch-test", ["test"], "run & watch test api", function (opts) {
-        kit.watchFiles("{test,lib}/**/*.js", {
+        kit.watchFiles("{test,src}/**/*.js", {
             handler: function (path, curr, prev, isDel) {
                 kit.logs(br.cyan("modifed:"), path);
                 kit.logs(br.cyan("***** run unit tests *****"));

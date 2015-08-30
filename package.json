@@ -26,9 +26,9 @@
   "author": "http://ysmood.org",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ysmood/flow/issues"
+    "url": "https://github.com/ysmood/noflow/issues"
   },
-  "homepage": "https://github.com/ysmood/flow",
+  "homepage": "https://github.com/ysmood/noflow",
   "dependencies": {
     "yaku": "latest"
   },
