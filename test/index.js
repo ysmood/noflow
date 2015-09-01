@@ -1,5 +1,7 @@
-import http from "http";
 import kit from "nokit";
+import noflow from "../src";
+let { _ } = kit;
+let bname = kit.path.basename;
 
 async function main () {
     // Get the test pattern from the env.
@@ -10,32 +12,10 @@ async function main () {
         paths
         .map(p => kit.path.resolve(p))
         .filter(p => p !== __filename)
-        .reduce((s, p) => s.concat(require(p)(testSuit)), [])
+        .reduce((s, p) => s.concat(require(p)(testSuit, title(p))), [])
     );
 
     process.exit(code);
-}
-
-function genServant () {
-    let serverList = [];
-
-    return {
-        rand (fn) {
-            let server = http.createServer(fn);
-            serverList.push(server);
-
-            let listen = kit.promisify(server.listen, server);
-
-            return listen(0).then(() => {
-                let { address, port } = server.address();
-                return `${address}:${port}`;
-            });
-        },
-
-        close () {
-            serverList.forEach(s => s.close());
-        }
-    };
 }
 
 let ken = kit.require("ken");
@@ -43,10 +23,37 @@ let it = ken();
 let testSuit = {
     eq: ken.eq,
     deepEq: ken.deepEq,
-    it: it,
-    request: kit.request,
-    servant: genServant()
+    it,
+    noflow,
+    flow: noflow.flow,
+
+    /**
+     * It will let a noflow app instrance listen to a random port, then
+     * request the port, then let the app close that port, then return a response
+     * object.
+     * `(app) => (url | { url, method, headers, reqData }) => Promise`
+     */
+    request: (app) => async (opts) => {
+        await app.listen();
+
+        let host = `http://127.0.0.1:${app.server.address().port}`;
+        if (_.isString(opts))
+            opts = `${host}${opts}`;
+        else
+            opts.url = `${host}${opts.url}`;
+
+        let res = await kit.request(opts);
+
+        await app.close();
+
+        return res;
+    }
 };
+
+function title (path) {
+    let n = bname(path, ".js");
+    return (str) => `${n}: ${str}`;
+}
 
 main().catch(err => {
     kit.logs(err && err.stack);
