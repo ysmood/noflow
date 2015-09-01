@@ -8,10 +8,12 @@ module.exports = function (task, option) {
     var enableES7 = _.curry(_.union, 2)(["--optional", "es7.asyncFunctions"]);
 
     option("-t <test/**/*.js>", "unit test filter", "test/**/*.js");
-    function test (patterns) {
-        return kit.async(kit.globSync(patterns).map(function (path) {
-            return kit.spawn("babel-node", enableES7([path]));
-        }));
+    function test (pattern) {
+        return kit.spawn(
+            "babel-node",
+            enableES7(["test/index.js"]),
+            { env: _.assign(process.env, { pattern: pattern }) }
+        );
     }
 
     option("-n <examples/basic>", "example file name", "examples/basic");

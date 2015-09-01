@@ -1,20 +1,13 @@
-import testSuit from "./test-suit";
 import flow from "../src/flow";
 
-let {
-    it, servant, request, eq, exit
-} = testSuit();
+export default ({
+    it, servant, request, eq
+}) => [
 
-it.async([
+    it("hello world", async () => {
+        let host = await servant.rand(flow(["hello world"]));
+        let body = await request(host);
+        eq(body, "hello world");
+    })
 
-    it("should flow hello world", () =>
-        servant.rand(flow(["hello world"]))
-        .then(host =>
-            request(host + "/").then(
-                body => eq("hello world", body)
-            )
-        )
-    )
-
-])
-.then(exit);
+];

@@ -1,7 +1,18 @@
 import http from "http";
 import kit from "nokit";
 
-function exit ({ code }) {
+async function main () {
+    // Get the test pattern from the env.
+    let paths = await kit.glob(process.env.pattern);
+
+    // load all the test file.
+    let { code } = await it.async(
+        paths
+        .map(p => kit.path.resolve(p))
+        .filter(p => p !== __filename)
+        .reduce((s, p) => s.concat(require(p)(testSuit)), [])
+    );
+
     process.exit(code);
 }
 
@@ -27,14 +38,16 @@ function genServant () {
     };
 }
 
-export default () => {
-    let ken = kit.require("ken");
-    return {
-        eq: ken.eq,
-        deepEq: ken.deepEq,
-        it: ken(),
-        request: kit.request,
-        servant: genServant(),
-        exit: exit
-    };
+let ken = kit.require("ken");
+let it = ken();
+let testSuit = {
+    eq: ken.eq,
+    deepEq: ken.deepEq,
+    it: it,
+    request: kit.request,
+    servant: genServant()
 };
+
+main().catch(err => {
+    kit.logs(err && err.stack);
+});
