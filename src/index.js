@@ -14,6 +14,7 @@ import middlewares from "./middlewares";
  *
  *     // http.Server.prototype.listen, but returns a promise instead.
  *     listen: (port) => Promise,
+ *     close: (cb) => Promise,
  *
  *     // The http `requestListener` of the Node native `http.createServer`.
  *     listener: (req ,res) => undefined
@@ -30,6 +31,12 @@ var noflow = (opts) => {
 
         return utils.yutils.promisify(
             routes.server.listen, routes.server
+        ).apply(0, arguments);
+    };
+
+    routes.close = function () {
+        return utils.yutils.promisify(
+            routes.server.close, routes.server
         ).apply(0, arguments);
     };
 
