@@ -80,7 +80,7 @@ app.listen(8123);
 
 # API
 
-- ## **[noflow](src/index.js?source#L23)**
+- ## **[noflow](src/index.js?source#L25)**
 
     Create an array instance with some handy server helper methods.
 
@@ -93,6 +93,8 @@ app.listen(8123);
 
             // http.Server.prototype.listen, but returns a promise instead.
             listen: (port) => Promise,
+
+            close: (cb) => Promise,
 
             // The http `requestListener` of the Node native `http.createServer`.
             listener: (req ,res) => undefined
@@ -112,16 +114,16 @@ app.listen(8123);
         If the middleware has async operation inside, it should return a promise.
         The promise can reject an error with a http `statusCode` property.
         The members of `ctx`:
-        ```coffee
+        ```js
         {
-            # It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
+            // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
             body: Any,
 
             req: http.IncomingMessage,
 
             res: http.IncomingMessage,
 
-            # It returns a promise which settles after all the next middlewares are setttled.
+            // It returns a promise which settles after all the next middlewares are setttled.
             next: => Promise
         }
         ```

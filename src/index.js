@@ -14,6 +14,7 @@ import middlewares from "./middlewares";
  *
  *     // http.Server.prototype.listen, but returns a promise instead.
  *     listen: (port) => Promise,
+ *
  *     close: (cb) => Promise,
  *
  *     // The http `requestListener` of the Node native `http.createServer`.
