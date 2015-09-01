@@ -25,7 +25,7 @@ var noflow = (opts) => {
 
     routes.listener = flow(routes, opts);
 
-    routes.listen = () => {
+    routes.listen = function () {
         routes.server = http.createServer(routes.listener);
 
         return utils.yutils.promisify(
