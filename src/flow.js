@@ -55,8 +55,7 @@ var flow = (middlewares) => (req, res) => {
         if (mid === undefined) {
             // TODO: #4
             if (parentNext) {
-                ctx.next = parentNext;
-                return ctx.next();
+                return parentNext();
             } else {
                 return Promise.resolve(error404(ctx));
             }
