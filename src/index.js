@@ -3,7 +3,6 @@
 import http from "http";
 import flow from "./flow";
 import utils from "./utils";
-import middlewares from "./middlewares";
 
 /**
  * Create an array instance with some handy server helper methods.
@@ -45,7 +44,6 @@ var noflow = (opts) => {
 };
 
 noflow.flow = flow;
-utils.assign(noflow, middlewares);
 utils.assign(noflow, utils);
 
 export default noflow;

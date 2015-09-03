@@ -80,7 +80,7 @@ app.listen(8123);
 
 # API
 
-- ## **[noflow](src/index.js?source#L25)**
+- ## **[noflow](src/index.js?source#L24)**
 
     Create an array instance with some handy server helper methods.
 
@@ -132,20 +132,6 @@ app.listen(8123);
 
         `(req, res) => Promise | Any` or `(ctx) => Promise`.
         The http request listener or middleware.
-
-
-
-- ## **[midToFlow(h)](src/middlewares.js?source#L12)**
-
-    Convert a Express-like middleware to `proxy.flow` middleware.
-
-    - **<u>param</u>**: `h` { _Function_ }
-
-        `(req, res, next) =>`
-
-    - **<u>return</u>**: { _Function_ }
-
-        `(ctx) => Promise`
 
 
 

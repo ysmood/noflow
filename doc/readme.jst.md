@@ -84,8 +84,6 @@ app.listen(8123);
 
 <%= doc['src/flow.js'] %>
 
-<%= doc['src/middlewares.js'] %>
-
 <%= doc['src/utils.js'] %>
 
 # [NoKit](https://github.com/ysmood/nokit)

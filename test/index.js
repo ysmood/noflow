@@ -12,7 +12,7 @@ async function main () {
         paths
         .map(p => kit.path.resolve(p))
         .filter(p => p !== __filename)
-        .reduce((s, p) => s.concat(require(p)(testSuit, title(p))), [])
+        .reduce((s, p) => s.concat(require(p)(testSuit).map(title(p))), [])
     );
 
     process.exit(code);
@@ -51,8 +51,11 @@ let testSuit = {
 };
 
 function title (path) {
-    let n = bname(path, ".js");
-    return (str) => `${n}: ${str}`;
+    return (fn) => {
+        let n = bname(path, ".js");
+        fn.msg = `${n}: ${fn.msg}`;
+        return fn;
+    };
 }
 
 main().catch(err => {

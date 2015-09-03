@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A minimal router for the future.",
   "main": "lib/index.js",
   "scripts": {
@@ -12,7 +12,9 @@
     "type": "git",
     "url": "https://github.com/ysmood/noflow"
   },
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "keywords": [
     "api",
     "app",
@@ -43,14 +45,39 @@
   "eslintConfig": {
     "parser": "babel-eslint",
     "rules": {
-      "indent": [2, 4],
-      "quotes": [2, "double"],
-      "linebreak-style": [2, "unix"],
-      "semi": [2, "always"],
-      "no-trailing-spaces": [2, { "skipBlankLines": true }],
-      "space-before-function-paren": [2, "always"],
-      "eqeqeq": [2, "allow-null"],
-      "no-console": [0]
+      "indent": [
+        2,
+        4
+      ],
+      "quotes": [
+        2,
+        "double"
+      ],
+      "linebreak-style": [
+        2,
+        "unix"
+      ],
+      "semi": [
+        2,
+        "always"
+      ],
+      "no-trailing-spaces": [
+        2,
+        {
+          "skipBlankLines": true
+        }
+      ],
+      "space-before-function-paren": [
+        2,
+        "always"
+      ],
+      "eqeqeq": [
+        2,
+        "allow-null"
+      ],
+      "no-console": [
+        0
+      ]
     },
     "env": {
       "browser": true,

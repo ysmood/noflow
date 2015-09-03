@@ -1,8 +1,8 @@
 export default ({
     it, request, eq, noflow, flow
-}, title) => [
+}) => [
 
-    it(title("basic"), async () => {
+    it("basic", async () => {
         let app = noflow();
 
         app.push(
@@ -13,10 +13,10 @@ export default ({
             "final"
         );
 
-        eq(await request(app)("/"), "final");
+        return eq(await request(app)("/"), "final");
     }),
 
-    it(title("parent catch composed error"), async () => {
+    it("parent catch composed error", async () => {
         let app = noflow();
 
         app.push(
@@ -32,7 +32,7 @@ export default ({
             ])
         );
 
-        eq(await request(app)("/"), "catch err");
+        return eq(await request(app)("/"), "catch err");
     })
 
 ];

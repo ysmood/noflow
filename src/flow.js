@@ -135,7 +135,7 @@ function endCtx (ctx) {
         } else if (body instanceof Buffer) {
             endRes(ctx, body);
         } else if (isFunction(body.then)) {
-            return body.then(function (data) {
+            return body.then((data) => {
                 ctx.body = data;
                 return endCtx(ctx);
             });
