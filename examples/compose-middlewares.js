@@ -5,9 +5,9 @@ let { select } = kit.require("proxy");
 
 let app = noflow();
 
-let parseQuery = async ctx => {
-    ctx.query = parse(ctx.req.url, true).query;
-    await ctx.next();
+let parseQuery = async $ => {
+    $.query = parse($.req.url, true).query;
+    await $.next();
 };
 
 // Only the selected url will waste CPU to parse the url.
@@ -16,11 +16,11 @@ app.push(
         { url: "/item" },
 
         // Here we use sub-route to compose two middlewares.
-        noflow.flow(parseQuery, ctx => ctx.body = ctx.query.id)
+        noflow.flow(parseQuery, $ => $.body = $.query.id)
     )
 );
 
 // Rest middlewares will keep tight and dry.
-app.push(ctx => ctx.body = "OK");
+app.push($ => $.body = "OK");
 
 app.listen(8123);

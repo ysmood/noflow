@@ -3,23 +3,23 @@ import kit from "nokit";
 
 let app = noflow();
 
-app.push(ctx => {
-    // "ctx.body" can be any line below, noflow will unbox the typed value sanely.
+app.push($ => {
+    // "$.body" can be any line below, noflow will unbox the typed value sanely.
 
     // string
-    ctx.body = "OK";
+    $.body = "OK";
 
     // json
-    ctx.body = { a: 10 };
+    $.body = { a: 10 };
 
     // stream
-    ctx.body = kit.createReadStream("index.js");
+    $.body = kit.createReadStream("index.js");
 
     // promise
-    ctx.body = kit.readJson("package.json");
+    $.body = kit.readJson("package.json");
 
     // buffer
-    ctx.body = kit.readFileSync("nofile.js");
+    $.body = kit.readFileSync("nofile.js");
 });
 
 app.listen(8123);

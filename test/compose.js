@@ -20,11 +20,11 @@ export default ({
         let app = noflow();
 
         app.push(
-            async (ctx) => {
+            async ($) => {
                 try {
-                    await ctx.next();
+                    await $.next();
                 } catch (err) {
-                    ctx.body = `catch ${err}`;
+                    $.body = `catch ${err}`;
                 }
             },
             flow([

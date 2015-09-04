@@ -3,20 +3,20 @@ import bodyParser from "body-parser";
 
 let app = noflow();
 
-let convert = (h) => (ctx) =>
+let convert = (h) => ($) =>
     new Promise((resolve, reject) =>
-        h(ctx.req, ctx.res, (err) => {
+        h($.req, $.res, (err) => {
             if (err)
                 return reject(err);
             else
-                return ctx.next().then(resolve);
+                return $.next().then(resolve);
         })
     );
 
 app.push(
     convert(bodyParser.json()),
-    ctx => {
-        ctx.body = ctx.req.body;
+    $ => {
+        $.body = $.req.body;
     }
 );
 

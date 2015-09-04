@@ -2,16 +2,16 @@ var noflow = require("../src");
 var app = noflow();
 
 // log time
-app.push(ctx => {
+app.push($ => {
     var start = new Date();
-    return ctx.next().then(() => {
+    return $.next().then(() => {
         console.log(new Date() - start);
     });
 });
 
 // response
-app.push(ctx => {
-    ctx.body = "hello world";
+app.push($ => {
+    $.body = "hello world";
 });
 
 app.listen(8123);

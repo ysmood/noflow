@@ -21,8 +21,8 @@ app.push(async ({ req: { method, url }, next }) => {
 });
 
 // response
-app.push(ctx => {
-    ctx.body = "hello world";
+app.push($ => {
+    $.body = "hello world";
 });
 
 app.listen(8123);

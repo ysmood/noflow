@@ -42,14 +42,14 @@ var noflow = require("noflow");
 
 var app = noflow();
 
-app.push(function (ctx) {
-    return ctx.next().then(function () {
+app.push(function ($) {
+    return $.next().then(function () {
         console.log("done");
     });
 });
 
-app.push(function (ctx) {
-    ctx.body = "hello world";
+app.push(function ($) {
+    $.body = "hello world";
 });
 
 app.listen(8123);
@@ -71,7 +71,7 @@ app.push(
         console.log("done");
     },
 
-    ctx => ctx.body = "hello world"
+    $ => $.body = "hello world"
 
 );
 
@@ -106,10 +106,10 @@ app.push(
         kit.readJson("a.json") // readJson returns a Promise
     ),
 
-    select({ url: "/b" }, async ctx => {
+    select({ url: "/b" }, async $ => {
         let txt = await kit.readFile("b.txt");
-        let data = await kit.request("http://test.com/" + ctx.url);
-        ctx.body = txt + data;
+        let data = await kit.request("http://test.com/" + $.url);
+        $.body = txt + data;
     })
 );
 

@@ -42,14 +42,14 @@ var noflow = require("noflow");
 
 var app = noflow();
 
-app.push(function (ctx) {
-    return ctx.next().then(function () {
+app.push(function ($) {
+    return $.next().then(function () {
         console.log("done");
     });
 });
 
-app.push(function (ctx) {
-    ctx.body = "hello world";
+app.push(function ($) {
+    $.body = "hello world";
 });
 
 app.listen(8123);
@@ -71,7 +71,7 @@ app.push(
         console.log("done");
     },
 
-    ctx => ctx.body = "hello world"
+    $ => $.body = "hello world"
 
 );
 
@@ -109,11 +109,11 @@ app.listen(8123);
 
     - **<u>param</u>**: `middlewares` { _Array_ }
 
-        Each item is a function `(ctx) => Promise | Any`,
+        Each item is a function `($) => Promise | Any`,
         or an object with the same type with `body`.
         If the middleware has async operation inside, it should return a promise.
         The promise can reject an error with a http `statusCode` property.
-        The members of `ctx`:
+        The members of `$`:
         ```js
         {
             // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
@@ -130,7 +130,7 @@ app.listen(8123);
 
     - **<u>return</u>**: { _Function_ }
 
-        `(req, res) => Promise | Any` or `(ctx) => Promise`.
+        `(req, res) => Promise | Any` or `($) => Promise`.
         The http request listener or middleware.
 
 
@@ -169,10 +169,10 @@ app.push(
         kit.readJson("a.json") // readJson returns a Promise
     ),
 
-    select({ url: "/b" }, async ctx => {
+    select({ url: "/b" }, async $ => {
         let txt = await kit.readFile("b.txt");
-        let data = await kit.request("http://test.com/" + ctx.url);
-        ctx.body = txt + data;
+        let data = await kit.request("http://test.com/" + $.url);
+        $.body = txt + data;
     })
 );
 

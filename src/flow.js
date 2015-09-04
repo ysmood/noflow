@@ -12,11 +12,11 @@ var { Promise, isFunction } = utils;
 
 /**
  * A promise based middlewares proxy.
- * @param  {Array} middlewares Each item is a function `(ctx) => Promise | Any`,
+ * @param  {Array} middlewares Each item is a function `($) => Promise | Any`,
  * or an object with the same type with `body`.
  * If the middleware has async operation inside, it should return a promise.
  * The promise can reject an error with a http `statusCode` property.
- * The members of `ctx`:
+ * The members of `$`:
  * ```js
  * {
  *     // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
@@ -30,39 +30,39 @@ var { Promise, isFunction } = utils;
  *     next: => Promise
  * }
  * ```
- * @return {Function} `(req, res) => Promise | Any` or `(ctx) => Promise`.
+ * @return {Function} `(req, res) => Promise | Any` or `($) => Promise`.
  * The http request listener or middleware.
  */
 var flow = (middlewares) => (req, res) => {
-    var ctx, parentNext;
+    var $, parentNext;
 
     // If it comes from a http listener, else it comes from a sub noflow.
     if (res) {
-        ctx = { req: req, res: res, body: null };
+        $ = { req: req, res: res, body: null };
     } else {
-        ctx = req;
-        parentNext = ctx.next;
+        $ = req;
+        parentNext = $.next;
 
-        req = ctx.req;
-        res = ctx.res;
+        req = $.req;
+        res = $.res;
     }
 
     var index = 0;
 
     // Wrap the next middleware.
-    ctx.next = () => {
+    $.next = () => {
         var mid = middlewares[index++];
         if (mid === undefined) {
             // TODO: #4
             if (parentNext) {
                 return parentNext();
             } else {
-                return Promise.resolve(error404(ctx));
+                return Promise.resolve(error404($));
             }
         }
 
         var fn = ensureMid(mid);
-        var ret = tryMid(fn, ctx);
+        var ret = tryMid(fn, $);
 
         // Check if the fn has thrown error.
         if (ret === tryMid) {
@@ -73,13 +73,13 @@ var flow = (middlewares) => (req, res) => {
     };
 
     // Begin the initial middleware.
-    var promise = ctx.next();
+    var promise = $.next();
 
-    // The root middleware will finnally end the entire ctx peacefully.
+    // The root middleware will finnally end the entire $ peacefully.
     if (!parentNext) {
         return promise.then(
-            () => endCtx(ctx),
-            err => errorAndEndCtx(err, ctx)
+            () => endCtx($),
+            err => errorAndEndCtx(err, $)
         );
     }
 
@@ -90,20 +90,20 @@ var flow = (middlewares) => (req, res) => {
 function ensureMid (mid) {
     if (isFunction(mid)) return mid;
 
-    return ctx => { ctx.body = mid; };
+    return $ => { $.body = mid; };
 }
 
 // for better performance, hack v8.
-function tryMid (fn, ctx) {
+function tryMid (fn, $) {
     try {
-        return fn(ctx);
+        return fn($);
     } catch (err) {
         tryMid.err = err;
         return tryMid;
     }
 }
 
-function endRes (ctx, data, isStr) {
+function endRes ($, data, isStr) {
     var buf;
     if (isStr) {
         buf = new Buffer(data);
@@ -111,20 +111,20 @@ function endRes (ctx, data, isStr) {
         buf = data;
     }
 
-    if (!ctx.res.headersSent) {
-        ctx.res.setHeader("Content-Length", buf.length);
+    if (!$.res.headersSent) {
+        $.res.setHeader("Content-Length", buf.length);
     }
 
-    ctx.res.end(buf);
+    $.res.end(buf);
 }
 
-function endCtx (ctx) {
-    var body = ctx.body;
-    var res = ctx.res;
+function endCtx ($) {
+    var body = $.body;
+    var res = $.res;
 
     switch (typeof body) {
     case "string":
-        endRes(ctx, body, true);
+        endRes($, body, true);
         break;
 
     case "object":
@@ -133,17 +133,17 @@ function endCtx (ctx) {
         } else if (body instanceof Stream) {
             body.pipe(res);
         } else if (body instanceof Buffer) {
-            endRes(ctx, body);
+            endRes($, body);
         } else if (isFunction(body.then)) {
             return body.then((data) => {
-                ctx.body = data;
-                return endCtx(ctx);
+                $.body = data;
+                return endCtx($);
             });
         } else {
-            if (!ctx.res.headersSent) {
+            if (!$.res.headersSent) {
                 res.setHeader("Content-Type", "application/json");
             }
-            endRes(ctx, JSON.stringify(body), true);
+            endRes($, JSON.stringify(body), true);
         }
         break;
 
@@ -152,28 +152,28 @@ function endCtx (ctx) {
         break;
 
     default:
-        endRes(ctx, body.toString(), true);
+        endRes($, body.toString(), true);
         break;
     }
 }
 
-function errorAndEndCtx (err, ctx) {
+function errorAndEndCtx (err, $) {
     // An error shouldn't have a status code of 200.
-    if (ctx.res.statusCode === 200) ctx.res.statusCode = 500;
+    if ($.res.statusCode === 200) $.res.statusCode = 500;
 
     // print the error details
     if (err instanceof Error)
-        ctx.body = err.stack;
+        $.body = err.stack;
     else
-        ctx.body = err + "";
+        $.body = err + "";
 
     // end the context
-    return endCtx(ctx);
+    return endCtx($);
 }
 
-function error404 (ctx) {
-    ctx.res.statusCode = 404;
-    ctx.body = http.STATUS_CODES[404];
+function error404 ($) {
+    $.res.statusCode = 404;
+    $.body = http.STATUS_CODES[404];
 }
 
 export default flow;

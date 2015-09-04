@@ -2,11 +2,11 @@ import noflow from "../src";
 
 let app = noflow();
 
-app.push(async ctx => {
+app.push(async $ => {
     try {
-        await ctx.next();
+        await $.next();
     } catch (e) {
-        ctx.body = e;
+        $.body = e;
     }
 }, () => {
     throw "error";
