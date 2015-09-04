@@ -16,7 +16,7 @@ let convert = (h) => ({ req, res, next }) =>
 app.push(
     convert(bodyParser.json()),
     $ => {
-        $.body($.req.body);
+        $.body = $.req.body;
     }
 );
 

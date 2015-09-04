@@ -16,7 +16,7 @@ app.push(
         { url: "/item" },
 
         // Here we use sub-route to compose two middlewares.
-        noflow.flow(parseQuery, $ => $.body($.query.id))
+        noflow.flow(parseQuery, $ => $.body = $.query.id)
     )
 );
 

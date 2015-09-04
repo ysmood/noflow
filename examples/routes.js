@@ -6,12 +6,12 @@ let { match, select } = kit.require("proxy");
 let app = noflow();
 
 app.push(
-    select({ url: "/test" }, $ => $.body($.url)),
+    select({ url: "/test" }, $ => $.body = $.url),
 
     select(
         // Express.js like url selector.
         { url: match("/items/:id") },
-        $ => $.body($.url.id)
+        $ => $.body = $.url.id
     ),
 
     select(
@@ -19,13 +19,13 @@ app.push(
             url: "/api",
             method: /GET|POST/ // route both GET and POST
         },
-        $ => $.body($.method + " " + $.url)
+        $ => $.body = $.method + " " + $.url
     ),
 
     select(
         // route js only
         { url: url => path.extname(url) === ".js" ? "js" : null },
-        $ => $.body($.url)
+        $ => $.body = $.url
     ),
 
     select(
@@ -35,7 +35,7 @@ app.push(
                 host: "a.com"
             }
         },
-        $ => $.body("ok")
+        $ => $.body = "ok"
     )
 );
 

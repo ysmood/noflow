@@ -10,7 +10,7 @@ app.push(
     select({ url: "/path" }, $ => {
         let url = parse($.req.url, true);
         // Here the body will be "10 - jack".
-        $.body(`${url.query.id} - ${url.query.name}`);
+        $.body = `${url.query.id} - ${url.query.name}`;
     })
 );
 
@@ -22,7 +22,7 @@ app.push(async $ => {
 
 // Now we can get the auto-parsed query string.
 app.push($ => {
-    $.body($.query.id);
+    $.body = $.query.id;
 });
 
 app.listen(8123);

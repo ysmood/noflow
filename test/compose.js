@@ -24,7 +24,7 @@ export default ({
                 try {
                     await $.next();
                 } catch (err) {
-                    $.body(`catch ${err}`);
+                    $.body = `catch ${err}`;
                 }
             },
             flow([

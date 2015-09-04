@@ -49,7 +49,7 @@ app.push(function ($) {
 });
 
 app.push(function ($) {
-    $.body("hello world");
+    $.body = "hello world";
 });
 
 app.listen(8123);
@@ -71,7 +71,7 @@ app.push(
         console.log("done");
     },
 
-    $ => $.body("hello world")
+    $ => $.body = "hello world"
 
 );
 
@@ -117,7 +117,7 @@ app.listen(8123);
         ```js
         {
             // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
-            body: (Any) => Any,
+            body: Any,
 
             req: http.IncomingMessage,
 
@@ -172,7 +172,7 @@ app.push(
     select({ url: "/b" }, async $ => {
         let txt = await kit.readFile("b.txt");
         let data = await kit.request("http://test.com/" + $.url);
-        $.body(txt + data);
+        $.body = txt + data;
     })
 );
 

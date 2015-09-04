@@ -20,7 +20,7 @@ var { Promise, isFunction } = utils;
  * ```js
  * {
  *     // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
- *     body: (Any) => Any,
+ *     body: Any,
  *
  *     req: http.IncomingMessage,
  *
@@ -38,7 +38,7 @@ var flow = (middlewares) => (req, res) => {
 
     // If it comes from a http listener, else it comes from a sub noflow.
     if (res) {
-        $ = { req: req, res: res, body: prop() };
+        $ = { req: req, res: res };
     } else {
         $ = req;
         parentNext = $.next;
@@ -86,21 +86,11 @@ var flow = (middlewares) => (req, res) => {
     return promise;
 };
 
-function prop () {
-    let value;
-    return function () {
-        if (arguments.length === 0)
-            return value;
-        else
-            value = arguments[0];
-    };
-}
-
 // Convert anything to a middleware function.
 function ensureMid (mid) {
     if (isFunction(mid)) return mid;
 
-    return $ => { $.body(mid); };
+    return $ => { $.body = mid; };
 }
 
 // for better performance, hack v8.
@@ -129,7 +119,7 @@ function endRes ($, data, isStr) {
 }
 
 function endCtx ($) {
-    var body = $.body();
+    var body = $.body;
     var res = $.res;
 
     switch (typeof body) {
@@ -146,7 +136,7 @@ function endCtx ($) {
             endRes($, body);
         } else if (isFunction(body.then)) {
             return body.then((data) => {
-                $.body(data);
+                $.body = data;
                 return endCtx($);
             });
         } else {
@@ -173,9 +163,9 @@ function errorAndEndCtx (err, $) {
 
     // print the error details
     if (err instanceof Error)
-        $.body(err.stack);
+        $.body = err.stack;
     else
-        $.body(err + "");
+        $.body = err + "";
 
     // end the context
     return endCtx($);
@@ -183,7 +173,7 @@ function errorAndEndCtx (err, $) {
 
 function error404 ($) {
     $.res.statusCode = 404;
-    $.body(http.STATUS_CODES[404]);
+    $.body = http.STATUS_CODES[404];
 }
 
 export default flow;
