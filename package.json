@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A minimal router for the future.",
   "main": "lib/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/ysmood/noflow",
   "dependencies": {
-    "yaku": "latest"
+    "yaku": "0.7.4"
   },
   "devDependencies": {
     "eslint": "latest",
