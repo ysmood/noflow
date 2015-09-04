@@ -21,6 +21,6 @@ app.push(
 );
 
 // Rest middlewares will keep tight and dry.
-app.push($ => $.body("OK"));
+app.push("OK");
 
 app.listen(8123);
