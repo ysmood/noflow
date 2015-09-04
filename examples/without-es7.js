@@ -11,7 +11,7 @@ app.push($ => {
 
 // response
 app.push($ => {
-    $.body = "hello world";
+    $.body("hello world");
 });
 
 app.listen(8123);

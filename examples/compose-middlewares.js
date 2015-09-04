@@ -16,11 +16,11 @@ app.push(
         { url: "/item" },
 
         // Here we use sub-route to compose two middlewares.
-        noflow.flow(parseQuery, $ => $.body = $.query.id)
+        noflow.flow(parseQuery, $ => $.body($.query.id))
     )
 );
 
 // Rest middlewares will keep tight and dry.
-app.push($ => $.body = "OK");
+app.push($ => $.body("OK"));
 
 app.listen(8123);

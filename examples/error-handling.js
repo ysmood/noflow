@@ -6,7 +6,7 @@ app.push(async $ => {
     try {
         await $.next();
     } catch (e) {
-        $.body = e;
+        $.body(e);
     }
 }, () => {
     throw "error";

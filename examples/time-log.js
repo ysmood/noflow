@@ -22,7 +22,7 @@ app.push(async ({ req: { method, url }, next }) => {
 
 // response
 app.push($ => {
-    $.body = "hello world";
+    $.body("hello world");
 });
 
 app.listen(8123);
