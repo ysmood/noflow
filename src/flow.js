@@ -38,7 +38,7 @@ var flow = (middlewares) => (req, res) => {
 
     // If it comes from a http listener, else it comes from a sub noflow.
     if (res) {
-        $ = { req: req, res: res, body: prop(null) };
+        $ = { req: req, res: res, body: prop() };
     } else {
         $ = req;
         parentNext = $.next;
@@ -86,8 +86,8 @@ var flow = (middlewares) => (req, res) => {
     return promise;
 };
 
-function prop (init) {
-    let value = init;
+function prop () {
+    let value;
     return function () {
         if (arguments.length === 0)
             return value;
