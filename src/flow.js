@@ -34,7 +34,7 @@ var { Promise, isFunction } = utils;
  * The http request listener or middleware.
  */
 var flow = (middlewares) => (req, res) => {
-    var $, parentNext;
+    var $, parentNext, next;
 
     // If it comes from a http listener, else it comes from a sub noflow.
     if (res) {
@@ -50,7 +50,7 @@ var flow = (middlewares) => (req, res) => {
     var index = 0;
 
     // Wrap the next middleware.
-    $.next = () => {
+    $.next = next = () => {
         var mid = middlewares[index++];
         if (mid === undefined) {
             // TODO: #4
@@ -73,7 +73,7 @@ var flow = (middlewares) => (req, res) => {
     };
 
     // Begin the initial middleware.
-    var promise = $.next();
+    var promise = next();
 
     // The root middleware will finnally end the entire $ peacefully.
     if (!parentNext) {
@@ -89,10 +89,10 @@ var flow = (middlewares) => (req, res) => {
 function prop (init) {
     let value = init;
     return function () {
-        if (arguments.length === 1)
-            value = arguments[0];
-        else
+        if (arguments.length === 0)
             return value;
+        else
+            value = arguments[0];
     };
 }
 
