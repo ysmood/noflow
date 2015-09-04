@@ -4,7 +4,10 @@ import kit from "nokit";
 let app = noflow();
 
 app.push(({ body }) => {
-    // "$.body" can be any line below, noflow will unbox the typed value sanely.
+    // Get the current content of body.
+    console.log(body());
+
+    // "$.body" can be set by any line below, noflow will unbox the typed value sanely.
 
     // string
     body("OK");
