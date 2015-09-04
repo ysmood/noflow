@@ -60,4 +60,20 @@ module.exports = function (task, option) {
             process.exit(res.code);
         });
     });
+
+    task("benchmark", "run benchmark", function () {
+        var paths = kit.globSync("benchmark/basic/*.js");
+        var port = 3120;
+        return kit.flow(paths.reverse().map(function (path) {
+            return function () {
+                var p = port++;
+                var name = kit.path.basename(path, ".js");
+                var child = kit.spawn("node", [path, p]).process;
+                return kit.spawn("node", ["benchmark/index.js", p, name])
+                .then(function () {
+                    child.kill();
+                });
+            };
+        }))();
+    });
 };
