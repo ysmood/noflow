@@ -1,5 +1,5 @@
 export default ({
-    it, request, eq, noflow, kit, chainify
+    it, request, eq, noflow, kit
 }) => [
 
     it("hello world", async () => {
@@ -12,23 +12,28 @@ export default ({
 
     it("should print the 'hello world' by given handler", async () => {
         let app = noflow();
-        
+
         app.push((ctx) => {
             ctx.body = "hello world";
         });
-        
+
         return eq(await request(app)("/"), "hello world");
     }),
 
     it("should echo the request string by given handler", async () => {
         let app = noflow();
-        
+        let proxy = kit.require("proxy");
+
+        app.push(proxy.body());
+
         app.push(async (ctx) => {
-            let [data] = await chainify(ctx.req, "data");
-            ctx.body = "echo:" + data;
+            ctx.body = "echo:" + ctx.reqBody;
         });
-        
-        return eq(await request(app)({url: "/", reqData: "XtX5cRfGIC"}), "echo:XtX5cRfGIC");
+
+        return eq(
+            await request(app)({url: "/", reqData: "XtX5cRfGIC"}),
+            "echo:XtX5cRfGIC"
+        );
     }),
 
     it("should echo the JSON object by given handler", async () => {
@@ -49,7 +54,7 @@ export default ({
         });
 
         let respObj = JSON.parse(await request(app)({url: "/"}));
-        return eq(kit._.isEqual(obj, respObj), true);
+        return eq(obj, respObj);
     }),
 
     it("should response with application/json content type", async () => {
@@ -68,7 +73,7 @@ export default ({
 
     it("should response with given content length", async () => {
         const FIX = 5;
-        
+
         let app = noflow();
         let buf = new Buffer(FIX);
 
@@ -77,7 +82,7 @@ export default ({
         });
 
         let resp = await request(app)({url: "/", body: false});
-        return eq(parseInt(resp.headers["content-length"]), FIX);
+        return eq(+resp.headers["content-length"], FIX);
     }),
 
     it("should echo the stream by given handler", async () => {
@@ -87,30 +92,23 @@ export default ({
             ctx.body = kit.createReadStream("package.json");
         });
 
-        let respBuf = await request(app)({url: "/", resEncoding: null});
-
-        // read stream to buf
-        let validateStream = kit.createReadStream("package.json");
-        let buf = new Buffer(0);
-
-        validateStream.on("data", (chunk) => {
-            buf = Buffer.concat([buf, chunk]);
-        });
-
-        await chainify(validateStream, "end");
-
-        return eq(Buffer.compare(buf, respBuf), 0);
+        return eq(
+            await request(app)({url: "/", resEncoding: null }),
+            await kit.readFile("package.json")
+        );
     }),
-    
+
     it("should echo the buffer by given handler", async () => {
         let app = noflow();
-        let buf = kit.readFileSync("package.json");
+        let buf = await kit.readFile("package.json");
 
         app.push(async (ctx) => {
             ctx.body = buf;
         });
 
-        let respBuf = await request(app)({url: "/", resEncoding: null});
-        return eq(Buffer.compare(buf, respBuf), 0);
+        return eq(
+            await request(app)({url: "/", resEncoding: null }),
+            buf
+        );
     })
 ];

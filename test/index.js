@@ -1,6 +1,5 @@
 import kit from "nokit";
 import noflow from "../src";
-import Promise from "yaku";
 let { _ } = kit;
 let bname = kit.path.basename;
 
@@ -19,11 +18,9 @@ async function main () {
     process.exit(code);
 }
 
-let ken = kit.require("ken");
-let it = ken();
+let it = kit.require("ken")();
 let testSuit = {
-    eq: ken.eq,
-    deepEq: ken.deepEq,
+    eq: it.eq,
     it,
     noflow,
     flow: noflow.flow,
@@ -49,20 +46,6 @@ let testSuit = {
         await app.close();
 
         return res;
-    },
-    
-    /**
-     * It is a helper method to promote a conversion from EventEmitter to promise chain.
-     * @param {EventEmitter} emitter
-     * @param {String} ev event
-     * @return a promise for emitted arugment array
-     */
-    chainify: (emitter, ev) => {
-        return new Promise((resolve) => {
-            emitter.on(ev, function () {
-                resolve(Array.prototype.slice.call(arguments));
-            });
-        });
     }
 };
 
