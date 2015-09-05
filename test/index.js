@@ -1,5 +1,6 @@
 import kit from "nokit";
 import noflow from "../src";
+import Promise from "yaku";
 let { _ } = kit;
 let bname = kit.path.basename;
 
@@ -26,6 +27,7 @@ let testSuit = {
     it,
     noflow,
     flow: noflow.flow,
+    kit: kit,
 
     /**
      * It will let a noflow app instrance listen to a random port, then
@@ -47,6 +49,20 @@ let testSuit = {
         await app.close();
 
         return res;
+    },
+    
+    /**
+     * It is a helper method to promote a conversion from EventEmitter to promise chain.
+     * @param {EventEmitter} emitter
+     * @param {String} ev event
+     * @return a promise for emitted arugment array
+     */
+    chainify: (emitter, ev) => {
+        return new Promise((resolve) => {
+            emitter.on(ev, function () {
+                resolve(Array.prototype.slice.call(arguments));
+            });
+        });
     }
 };
 
