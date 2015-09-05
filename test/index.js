@@ -1,6 +1,7 @@
 import kit from "nokit";
 import noflow from "../src";
 let { _ } = kit;
+let br = kit.require("brush");
 let bname = kit.path.basename;
 
 async function main () {
@@ -52,7 +53,7 @@ let testSuit = {
 function title (path) {
     return (fn) => {
         let n = bname(path, ".js");
-        fn.msg = `${n}: ${fn.msg}`;
+        fn.msg = `${br.grey(n)}: ${fn.msg}`;
         return fn;
     };
 }
