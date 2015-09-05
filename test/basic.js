@@ -85,6 +85,14 @@ export default ({
         return eq(+resp.headers["content-length"], FIX);
     }),
 
+    it("should response あおい with content length 9", async () => {
+        let app = noflow();
+        app.push("あおい");
+
+        let res = await request(app)({url: "/", body: false});
+        return eq(+res.headers["content-length"], 9);
+    }),
+
     it("should echo the stream by given handler", async () => {
         let app = noflow();
 
