@@ -84,7 +84,7 @@ export default ({
         let app = noflow();
 
         app.push(async (ctx) => {
-            ctx.body = kit.createReadStream("package.json");;
+            ctx.body = kit.createReadStream("package.json");
         });
 
         let respBuf = await request(app)({url: "/", resEncoding: null});
