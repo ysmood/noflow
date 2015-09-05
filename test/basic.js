@@ -7,7 +7,7 @@ export default ({
 
         app.push("hello world");
 
-        return eq(await request(app)("/"), "hello world");
+        return eq(await request(app)(), "hello world");
     }),
 
     it("should print the 'hello world' by given handler", async () => {
@@ -17,7 +17,7 @@ export default ({
             ctx.body = "hello world";
         });
 
-        return eq(await request(app)("/"), "hello world");
+        return eq(await request(app)(), "hello world");
     }),
 
     it("should echo the request string by given handler", async () => {

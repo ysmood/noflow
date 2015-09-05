@@ -39,6 +39,8 @@ let testSuit = {
         let host = `http://127.0.0.1:${app.server.address().port}`;
         if (_.isString(opts))
             opts = `${host}${opts}`;
+        else if (_.isUndefined(opts))
+            opts = host + "/";
         else
             opts.url = `${host}${opts.url}`;
 

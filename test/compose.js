@@ -13,7 +13,7 @@ export default ({
             "final"
         );
 
-        return eq(await request(app)("/"), "final");
+        return eq(await request(app)(), "final");
     }),
 
     it("parent catch composed error", async () => {
@@ -32,7 +32,7 @@ export default ({
             ])
         );
 
-        return eq(await request(app)("/"), "catch err");
+        return eq(await request(app)(), "catch err");
     })
 
 ];
