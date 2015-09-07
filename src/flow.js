@@ -192,7 +192,7 @@ function error404 ($) {
 
 export default function (middlewares) {
     // Make sure we pass in an array
-    if (!(middlewares instanceof Array)) {
+    if (!utils.isArray(middlewares)) {
         middlewares = [].slice.call(arguments);
     }
 

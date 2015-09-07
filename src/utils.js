@@ -21,6 +21,10 @@ export default {
         return typeof value === "function";
     },
 
+    isArray (value) {
+        return value instanceof Array;
+    },
+
     assign (src, ...dests) {
         var len = dests.length;
         var dest;
