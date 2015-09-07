@@ -1,6 +1,6 @@
 # NoFlow
 
-A minimal router for the future.
+A minimal middleware composer for the future.
 The interesting part is that it also works fine without any ES6 or ES7 syntax,
 it's up to you to decide how fancy it will be. And because it's middlewares are just normal
 functions, they can be easily composed with each other.

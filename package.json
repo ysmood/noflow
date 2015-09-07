@@ -1,7 +1,7 @@
 {
   "name": "noflow",
   "version": "0.5.0",
-  "description": "A minimal router for the future.",
+  "description": "A minimal middleware composer for the future.",
   "main": "lib/index.js",
   "scripts": {
     "no": "no",
