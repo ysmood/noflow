@@ -11,7 +11,7 @@ import Stream from "stream";
 var { Promise, isFunction } = utils;
 
 /**
- * A promise based middlewares proxy.
+ * A promise based function composer.
  * @param  {Array} middlewares If an non-array passed in, the whole arguments
  * of this function will be treated as the middleware array.
  * Each item is a function `($) => Promise | Any`,
@@ -34,6 +34,25 @@ var { Promise, isFunction } = utils;
  * ```
  * @return {Function} `(req, res) => Promise | Any` or `($) => Promise`.
  * The http request listener or middleware.
+ * @example
+ * Noflow encourages composition.
+ * ```js
+ * import flow from "noflow"
+ * let app = flow();
+ * let c = 0;
+ * app.push(
+ *     $ => $.next(c++),
+ *     flow(
+ *         $ => $.next(c++),
+ *         flow(
+ *             $ => $.next(c++),
+ *             $ => $.next(c++)
+ *         )
+ *     ),
+ *     $ => $.body = c
+ * );
+ * app.listen(8123);
+ * ```
  */
 var flow = (middlewares) => (req, res) => {
     var $, parentNext, next;

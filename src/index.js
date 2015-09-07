@@ -20,6 +20,13 @@ import utils from "./utils";
  *     listener: (req ,res) => undefined
  * }
  * ```
+ * @example
+ * ```js
+ * import flow from "noflow"
+ * let app = flow();
+ * app.push("OK");
+ * app.listen(8123).then(() => console.log("started"));
+ * ```
  */
 var app = function () {
     if (arguments.length > 0) {

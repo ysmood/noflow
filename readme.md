@@ -80,7 +80,7 @@ app.listen(8123);
 
 # API
 
-- ## **[app](src/index.js?source#L24)**
+- ## **[app](src/index.js?source#L31)**
 
     Create an array instance with some handy server helper methods.
 
@@ -101,11 +101,20 @@ app.listen(8123);
         }
         ```
 
+    - **<u>example</u>**:
+
+        ```js
+        import flow from "noflow"
+        let app = flow();
+        app.push("OK");
+        app.listen(8123).then(() => console.log("started"));
+        ```
 
 
-- ## **[flow(middlewares)](src/flow.js?source#L38)**
 
-    A promise based middlewares proxy.
+- ## **[flow(middlewares)](src/flow.js?source#L57)**
+
+    A promise based function composer.
 
     - **<u>param</u>**: `middlewares` { _Array_ }
 
@@ -134,6 +143,27 @@ app.listen(8123);
 
         `(req, res) => Promise | Any` or `($) => Promise`.
         The http request listener or middleware.
+
+    - **<u>example</u>**:
+
+        Noflow encourages composition.
+        ```js
+        import flow from "noflow"
+        let app = flow();
+        let c = 0;
+        app.push(
+            $ => $.next(c++),
+            flow(
+                $ => $.next(c++),
+                flow(
+                    $ => $.next(c++),
+                    $ => $.next(c++)
+                )
+            ),
+            $ => $.body = c
+        );
+        app.listen(8123);
+        ```
 
 
 
