@@ -1,9 +1,9 @@
 export default ({
-    it, request, eq, noflow, flow
+    it, request, eq, flow
 }) => [
 
     it("basic", async () => {
-        let app = noflow();
+        let app = flow();
 
         app.push(
             ({ next }) => next(),
@@ -17,7 +17,7 @@ export default ({
     }),
 
     it("arguments", async () => {
-        let app = noflow();
+        let app = flow();
 
         app.push(
             ({ next }) => next(),
@@ -31,7 +31,7 @@ export default ({
     }),
 
     it("parent catch composed error", async () => {
-        let app = noflow();
+        let app = flow();
 
         app.push(
             async ($) => {

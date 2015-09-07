@@ -1,7 +1,7 @@
-import noflow from "../src";
+import flow from "../src";
 import bodyParser from "body-parser";
 
-let app = noflow();
+let app = flow();
 
 let convert = (h) => ({ req, res, next }) =>
     new Promise((resolve, reject) =>

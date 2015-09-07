@@ -1,5 +1,5 @@
 import kit from "nokit";
-import noflow from "../src";
+import flow from "../src";
 let { _ } = kit;
 let br = kit.require("brush");
 let bname = kit.path.basename;
@@ -17,7 +17,7 @@ async function main () {
             (s, p) => s.concat(
                 require(p)(testSuit)
                 .map(title(p))
-                .filter(({ msg }) => reg.test(msg))
+                .filter(({ msg }) => reg.test(msg.replace(/\x1B\[\d+m/g, "")))
             )
         , [])
     );
@@ -29,8 +29,7 @@ let it = kit.require("ken")();
 let testSuit = {
     eq: it.eq,
     it,
-    noflow,
-    flow: noflow.flow,
+    flow: flow,
     kit: kit,
 
     /**

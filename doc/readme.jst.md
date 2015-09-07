@@ -22,9 +22,9 @@ Install it: `npm i noflow`.
 ### Hello World Example
 
 ```javascript
-import noflow from "noflow";
+import flow from "noflow";
 
-let app = noflow();
+let app = flow();
 
 // Everything pushed into the app will be converted to a
 // middleware object sanely, even it's a string, buffer or anything else.
@@ -38,9 +38,9 @@ app.listen(8123);
 Without ES7, you can still have all the good stuffs of Noflow.
 
 ```javascript
-var noflow = require("noflow");
+var flow = require("noflow");
 
-var app = noflow();
+var app = flow();
 
 app.push(function ($) {
     return $.next().then(function () {
@@ -60,9 +60,9 @@ app.listen(8123);
 Designed for the future ES7.
 
 ```javascript
-import noflow from "noflow";
+import flow from "noflow";
 
-let app = noflow();
+let app = flow();
 
 app.push(
 
@@ -94,11 +94,11 @@ nokit has all the commonly used IO functions with Promise support.
 For example you can use them seamlessly:
 
 ```js
-import noflow from "noflow";
+import flow from "noflow";
 import kit from "nokit";
 let { select } = kit.require("proxy");
 
-let app = noflow();
+let app = flow();
 
 app.push(
     select(

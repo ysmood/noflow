@@ -1,9 +1,9 @@
 export default ({
-    it, request, eq, noflow, kit
+    it, request, eq, flow, kit
 }) => [
 
     it("hello world", async () => {
-        let app = noflow();
+        let app = flow();
 
         app.push("hello world");
 
@@ -11,7 +11,7 @@ export default ({
     }),
 
     it("should print the 'hello world' by given handler", async () => {
-        let app = noflow();
+        let app = flow();
 
         app.push((ctx) => {
             ctx.body = "hello world";
@@ -21,7 +21,7 @@ export default ({
     }),
 
     it("should echo the request string by given handler", async () => {
-        let app = noflow();
+        let app = flow();
         let proxy = kit.require("proxy");
 
         app.push(proxy.body());
@@ -37,7 +37,7 @@ export default ({
     }),
 
     it("should echo the JSON object by given handler", async () => {
-        let app = noflow();
+        let app = flow();
         let obj = {
             prop1: 10,
             prop2: "prop2",
@@ -58,7 +58,7 @@ export default ({
     }),
 
     it("should response with application/json content type", async () => {
-        let app = noflow();
+        let app = flow();
         let obj = {
             prop1: 10
         };
@@ -74,7 +74,7 @@ export default ({
     it("should response with given content length", async () => {
         const FIX = 5;
 
-        let app = noflow();
+        let app = flow();
         let buf = new Buffer(FIX);
 
         app.push(async (ctx) => {
@@ -86,7 +86,7 @@ export default ({
     }),
 
     it("should response あおい with content length 9", async () => {
-        let app = noflow();
+        let app = flow();
         app.push("あおい");
 
         let res = await request(app)({url: "/", body: false});
@@ -94,7 +94,7 @@ export default ({
     }),
 
     it("should echo the stream by given handler", async () => {
-        let app = noflow();
+        let app = flow();
 
         app.push(async (ctx) => {
             ctx.body = kit.createReadStream("package.json");
@@ -107,7 +107,7 @@ export default ({
     }),
 
     it("should echo the buffer by given handler", async () => {
-        let app = noflow();
+        let app = flow();
         let buf = await kit.readFile("package.json");
 
         app.push(async (ctx) => {

@@ -1,9 +1,9 @@
-import noflow from "../src";
+import flow from "../src";
 import { parse } from "url";
 import kit from "nokit";
 let { select } = kit.require("proxy");
 
-let app = noflow();
+let app = flow();
 
 let parseQuery = async $ => {
     $.query = parse($.req.url, true).query;
@@ -16,7 +16,7 @@ app.push(
         { url: "/item" },
 
         // Here we use sub-route to compose two middlewares.
-        noflow.flow(parseQuery, $ => $.body = $.query.id)
+        flow(parseQuery, $ => $.body = $.query.id)
     )
 );
 

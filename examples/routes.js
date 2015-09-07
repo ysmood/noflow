@@ -1,9 +1,9 @@
-import noflow from "../src";
+import flow from "../src";
 import path from "path";
 import kit from "nokit";
 let { match, select } = kit.require("proxy");
 
-let app = noflow();
+let app = flow();
 
 app.push(
     select({ url: "/test" }, $ => $.body = $.url),

@@ -1,7 +1,7 @@
-var noflow = require("../../lib");
+var flow = require("../../lib");
 var port = process.argv[2];
 
-var app = noflow();
+var app = flow();
 
 app.push(function ($) {
     return $.next();

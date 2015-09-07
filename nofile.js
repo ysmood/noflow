@@ -36,14 +36,15 @@ module.exports = function (task, option) {
         return kit.spawn("babel", ["src", "--out-dir", "lib"]);
     });
 
-    task("watch-test", ["test"], "run & watch test api", function (opts) {
-        kit.watchFiles("{test,src}/**/*.js", {
-            handler: function (path, curr, prev, isDel) {
-                kit.logs(br.cyan("modifed:"), path);
-                kit.logs(br.cyan("***** run unit tests *****"));
-                if (!isDel) test(opts.T).catch(_.noop);
-            }
-        });
+    task("watch-test", "run & watch test api", function (opts) {
+        function handler (path, curr, prev, isDel) {
+            kit.logs(br.cyan("modifed:"), path);
+            kit.logs(br.cyan("***** run unit tests *****"));
+            if (!isDel) test(opts.T).catch(_.noop);
+        }
+
+        handler(".");
+        kit.watchFiles("{test,src}/**/*.js", { handler: handler });
     });
 
     task("lint", "lint all code of this project", function () {

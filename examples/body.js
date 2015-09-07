@@ -1,10 +1,10 @@
-import noflow from "../src";
+import flow from "../src";
 import kit from "nokit";
 
-let app = noflow();
+let app = flow();
 
 app.push(($) => {
-    // "$.body" can be set by any line below, noflow will unbox the typed value sanely.
+    // "$.body" can be set by any line below, flow will unbox the typed value sanely.
 
     // string
     $.body = "OK";

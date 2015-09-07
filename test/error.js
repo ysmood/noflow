@@ -1,9 +1,9 @@
 export default ({
-    it, request, eq, noflow, flow
+    it, request, eq, flow
 }) => [
 
     it("basic", async () => {
-        let app = noflow();
+        let app = flow();
 
         app.push(
             async $ => {

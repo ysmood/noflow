@@ -1,6 +1,6 @@
-import noflow from "../src";
+import flow from "../src";
 
-let app = noflow();
+let app = flow();
 
 app.push(async ($) => {
     try {

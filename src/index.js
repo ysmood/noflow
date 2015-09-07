@@ -21,10 +21,14 @@ import utils from "./utils";
  * }
  * ```
  */
-var noflow = (opts) => {
+var app = function () {
+    if (arguments.length > 0) {
+        return flow.apply(0, arguments);
+    }
+
     var routes = [];
 
-    routes.listener = flow(routes, opts);
+    routes.listener = flow(routes);
 
     routes.listen = function () {
         routes.server = http.createServer(routes.listener);
@@ -43,7 +47,6 @@ var noflow = (opts) => {
     return routes;
 };
 
-noflow.flow = flow;
-utils.assign(noflow, utils);
+utils.assign(app, utils);
 
-export default noflow;
+export default app;
