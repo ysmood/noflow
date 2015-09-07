@@ -12,7 +12,9 @@ var { Promise, isFunction } = utils;
 
 /**
  * A promise based middlewares proxy.
- * @param  {Array} middlewares Each item is a function `($) => Promise | Any`,
+ * @param  {Array} middlewares If an non-array passed in, the whole arguments
+ * of this function will be treated as the middleware array.
+ * Each item is a function `($) => Promise | Any`,
  * or an object with the same type with `body`.
  * If the middleware has async operation inside, it should return a promise.
  * The promise can reject an error with a http `statusCode` property.
@@ -176,4 +178,11 @@ function error404 ($) {
     $.body = http.STATUS_CODES[404];
 }
 
-export default flow;
+export default function (middlewares) {
+    // Make sure we pass in an array
+    if (!(middlewares instanceof Array)) {
+        middlewares = [].slice.call(arguments);
+    }
+
+    return flow(middlewares);
+}

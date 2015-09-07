@@ -16,6 +16,20 @@ export default ({
         return eq(await request(app)(), "final");
     }),
 
+    it("arguments", async () => {
+        let app = noflow();
+
+        app.push(
+            ({ next }) => next(),
+            flow(
+                ({ next }) => next(),
+                ($) => $.body = "final"
+            )
+        );
+
+        return eq(await request(app)(), "final");
+    }),
+
     it("parent catch composed error", async () => {
         let app = noflow();
 
