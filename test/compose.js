@@ -5,15 +5,20 @@ export default ({
     it("basic", async () => {
         let app = flow();
 
+        let c = 0;
         app.push(
-            ({ next }) => next(),
-            flow([
-                ({ next }) => next()
-            ]),
-            "final"
+            $ => $.next(c++),
+            flow(
+                $ => $.next(c++),
+                flow(
+                    $ => $.next(c++),
+                    $ => $.next(c++)
+                )
+            ),
+            $ => $.body = c
         );
 
-        return eq(await request(app)(), "final");
+        return eq(await request(app)(), "4");
     }),
 
     it("arguments", async () => {
