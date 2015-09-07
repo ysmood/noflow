@@ -90,7 +90,7 @@ export default ({
         app.push("あおい");
 
         let res = await request(app)({url: "/", body: false});
-        return eq(+res.headers["content-length"], 9);
+        return eq(res.headers["content-length"], "9");
     }),
 
     it("should echo the stream by given handler", async () => {
@@ -104,6 +104,22 @@ export default ({
             await request(app)({url: "/", resEncoding: null }),
             await kit.readFile("package.json")
         );
+    }),
+
+    it("should response `null` with status code 204", async () => {
+        let app = flow();
+        app.push(null);
+
+        let res = await request(app)({url: "/", body: false});
+        return eq(res.statusCode, 204);
+    }),
+
+    it("should response `undefined` with status code 204", async () => {
+        let app = flow();
+        app.push($ => $.body = undefined);
+
+        let res = await request(app)({url: "/", body: false});
+        return eq(res.statusCode, 204);
     }),
 
     it("should echo the buffer by given handler", async () => {

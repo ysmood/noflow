@@ -120,6 +120,15 @@ function endRes ($, data, isStr) {
     $.res.end(buf);
 }
 
+function setStatusCode (res, code) {
+    if (res.statusCode === 200) res.statusCode = code;
+}
+
+function endEmpty (res) {
+    setStatusCode(res, 204);
+    res.end();
+}
+
 function endCtx ($) {
     var body = $.body;
     var res = $.res;
@@ -131,7 +140,7 @@ function endCtx ($) {
 
     case "object":
         if (body == null) {
-            res.end();
+            endEmpty(res);
         } else if (body instanceof Stream) {
             body.pipe(res);
         } else if (body instanceof Buffer) {
@@ -150,7 +159,7 @@ function endCtx ($) {
         break;
 
     case "undefined":
-        res.end();
+        endEmpty(res);
         break;
 
     default:
@@ -160,22 +169,25 @@ function endCtx ($) {
 }
 
 function errorAndEndCtx (err, $) {
-    // An error shouldn't have a status code of 200.
-    if ($.res.statusCode === 200) $.res.statusCode = 500;
+    setStatusCode($.res, 500);
 
-    // print the error details
-    if (err instanceof Error)
-        $.body = err.stack;
-    else
-        $.body = err + "";
+    if (process.env.NODE_ENV === "production") {
+        $.body = http.STATUS_CODES[$.res.statusCode];
+    } else {
+        // print the error details
+        if (err instanceof Error)
+            $.body = err.stack;
+        else
+            $.body = err + "";
+    }
 
     // end the context
     return endCtx($);
 }
 
 function error404 ($) {
-    $.res.statusCode = 404;
-    $.body = http.STATUS_CODES[404];
+    setStatusCode($.res, 404);
+    $.body = http.STATUS_CODES[$.res.statusCode];
 }
 
 export default function (middlewares) {
