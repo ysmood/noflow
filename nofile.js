@@ -7,7 +7,7 @@ var br = kit.require("brush");
 module.exports = function (task, option) {
     var enableES7 = _.curry(_.union, 2)(["--optional", "es7.asyncFunctions"]);
 
-    option("-t <test/**/*.js>", "unit test filter", "test/**/*.js");
+    option("-t <.*>", "unit test regex filter", ".*");
     function test (pattern) {
         return kit.spawn(
             "babel-node",
@@ -55,8 +55,8 @@ module.exports = function (task, option) {
         return kit.warp("{examples,src,test}/**/*.js").load(lint).run();
     });
 
-    task("test", ["lint"], "run test once", function (opts) {
-        test(opts.T).catch(function (res) {
+    task("test", ["lint"], "run test once", function () {
+        test(".*").catch(function (res) {
             process.exit(res.code);
         });
     });

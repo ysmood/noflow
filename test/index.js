@@ -6,14 +6,20 @@ let bname = kit.path.basename;
 
 async function main () {
     // Get the test pattern from the env.
-    let paths = await kit.glob(process.env.pattern);
+    let paths = await kit.glob(["test/**/*.js", "!test/index.js"]);
+    let reg = new RegExp(process.env.pattern);
 
     // load all the test file.
     let { code } = await it.async(
         paths
         .map(p => kit.path.resolve(p))
-        .filter(p => p !== __filename)
-        .reduce((s, p) => s.concat(require(p)(testSuit).map(title(p))), [])
+        .reduce(
+            (s, p) => s.concat(
+                require(p)(testSuit)
+                .map(title(p))
+                .filter(({ msg }) => reg.test(msg))
+            )
+        , [])
     );
 
     process.exit(code);
