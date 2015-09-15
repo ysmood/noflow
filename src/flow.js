@@ -98,10 +98,9 @@ var flow = (middlewares) => (req, res) => {
 
     // The root middleware will finnally end the entire $ peacefully.
     if (!parentNext) {
-        return promise.then(
-            () => endCtx($),
-            err => errorAndEndCtx(err, $)
-        );
+        return promise
+        .then(() => endCtx($))
+        .catch(err => errorAndEndCtx(err, $));
     }
 
     return promise;
@@ -173,11 +172,9 @@ function endCtx ($) {
             if (!$.res.headersSent) {
                 res.setHeader("Content-Type", "application/json");
             }
-            try {
-                endRes($, JSON.stringify(body), true);
-            } catch(err){
-                errorAndEndCtx(err, $);
-            }
+            
+            endRes($, JSON.stringify(body), true);
+            
         }
         break;
 
