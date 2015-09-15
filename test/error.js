@@ -48,17 +48,27 @@ export default ({
         return eq([res.statusCode], [500]);
     }),
 
-    it("status code 500 with unending promise", async () => {
+    it("timeout", async () => {
         let app = flow();
 
-        var promise = {
-            then (promise){}
-        }
-        // 
-        app.push($ => $.body = promise);
-        let res = await request(app)({ url: "/", body: false });
+        app.push(async ($) => {
+            let p1 = new Promise((resolve, reject) => {
+                setTimeout( () => {
+                    $.body = "time out";
+                    resolve();
+                }, 100);
 
-        return eq([res.statusCode], [500]);
+                let p2 = $.next();
+                p2.then( (v) => resolve(v)).catch( (err) => reject(err) );
+            });
+
+            return p1;
+        }, () => new Promise((r) => {
+            setTimeout(r, 200);
+        }));
+
+        let body = await request(app)();
+
+        return eq(body, "time out");
     })
-
 ];
