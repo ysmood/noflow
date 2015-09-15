@@ -173,7 +173,11 @@ function endCtx ($) {
             if (!$.res.headersSent) {
                 res.setHeader("Content-Type", "application/json");
             }
-            endRes($, JSON.stringify(body), true);
+            try {
+                endRes($, JSON.stringify(body), true);
+            } catch(err){
+                errorAndEndCtx(err, $);
+            }
         }
         break;
 

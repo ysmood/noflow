@@ -33,6 +33,32 @@ export default ({
         let res = await request(app)({ url: "/", body: false });
 
         return eq([res.statusCode, res.body], [500, "error"]);
+    }),
+
+    it("status code 500 with circle body object", async () => {
+        let app = flow();
+
+        // circle object
+        var body = {};
+        body.next = body;
+        app.push($ => $.body = body);
+
+        let res = await request(app)({ url: "/", body: false });
+
+        return eq([res.statusCode], [500]);
+    }),
+
+    it("status code 500 with unending promise", async () => {
+        let app = flow();
+
+        var promise = {
+            then (promise){}
+        }
+        // 
+        app.push($ => $.body = promise);
+        let res = await request(app)({ url: "/", body: false });
+
+        return eq([res.statusCode], [500]);
     })
 
 ];
