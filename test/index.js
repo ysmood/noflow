@@ -3,6 +3,7 @@ import flow from "../src";
 let { _ } = kit;
 let br = kit.require("brush");
 let bname = kit.path.basename;
+global.Promise = kit.Promise;
 
 async function main () {
     // Get the test pattern from the env.
@@ -10,7 +11,7 @@ async function main () {
     let reg = new RegExp(process.env.pattern);
 
     // load all the test file.
-    let { code } = await it.async(
+    await it.async(
         paths
         .map(p => kit.path.resolve(p))
         .reduce(
@@ -21,8 +22,6 @@ async function main () {
             )
         , [])
     );
-
-    process.exit(code);
 }
 
 let it = kit.require("ken")();
