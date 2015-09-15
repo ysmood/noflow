@@ -1,4 +1,5 @@
 import kit from "nokit";
+import junit from "junit";
 import flow from "../src";
 let { _ } = kit;
 let br = kit.require("brush");
@@ -24,7 +25,7 @@ async function main () {
     );
 }
 
-let it = kit.require("ken")();
+let it = junit();
 let testSuit = {
     eq: it.eq,
     it,

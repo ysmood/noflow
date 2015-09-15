@@ -32,14 +32,15 @@
   },
   "homepage": "https://github.com/ysmood/noflow",
   "dependencies": {
-    "yaku": "0.7.4"
+    "yaku": "0.7.5"
   },
   "devDependencies": {
-    "eslint": "latest",
-    "nokit": "latest",
     "babel": "latest",
     "babel-eslint": "latest",
     "body-parser": "latest",
+    "eslint": "latest",
+    "junit": "0.0.3",
+    "nokit": "latest",
     "path-to-regexp": "latest"
   },
   "eslintConfig": {
@@ -61,12 +62,7 @@
         2,
         "always"
       ],
-      "no-trailing-spaces": [
-        2,
-        {
-          "skipBlankLines": true
-        }
-      ],
+      "no-trailing-spaces": 2,
       "space-before-function-paren": [
         2,
         "always"
@@ -77,8 +73,7 @@
       ],
       "no-console": [
         0
-      ],
-      "no-trailing-spaces": 2
+      ]
     },
     "env": {
       "browser": true,

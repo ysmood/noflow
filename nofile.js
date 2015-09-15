@@ -4,7 +4,7 @@ import kit from "nokit";
 let { _ } = kit;
 let br = kit.require("brush");
 
-module.exports = (task, option) => {
+export default (task, option) => {
     option("-t <.*>", "unit test regex filter", ".*");
     function test (pattern) {
         return kit.spawn(
