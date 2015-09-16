@@ -78,6 +78,37 @@ app.push(
 app.listen(8123);
 ```
 
+### Express middleware
+
+It's easy to convert an express middleware to noflow middleware.
+
+```javascript
+import flow from "noflow";
+import bodyParser from "body-parser";
+
+let app = flow();
+
+let convert = (h) => ({ req, res, next }) =>
+    new Promise((resolve, reject) =>
+        h(req, res, (err) => {
+            if (err)
+                return reject(err);
+            else
+                return next().then(resolve);
+        })
+    );
+
+app.push(
+    convert(bodyParser.json()),
+    $ => {
+        $.body = $.req.body;
+    }
+);
+
+app.listen(8123);
+
+```
+
 # API
 
 <%= doc['src/index.js'] %>
