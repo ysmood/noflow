@@ -50,9 +50,7 @@ export default ({
 
     it("status code 400 with missing middlewares", async () => {
         let app = flow();
-
         let res = await request(app)({ url: "/", body: false });
-        
         return eq([res.statusCode], [404]);
     }),
 
