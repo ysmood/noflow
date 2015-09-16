@@ -11,7 +11,7 @@ To use noflow, you only have to remember a single rule "Any async function shoul
 
 To run the examples, you have to install the babeljs: `npm i -g babel`.
 Such as, to run the [examples/basic.js](examples/basic.js), use command like:
-`babel-node --optional es7.asyncFunctions examples/basic.js`
+`babel-node examples/basic.js`
 
 [![NPM version](https://badge.fury.io/js/noflow.svg)](http://badge.fury.io/js/noflow) [![Build Status](https://travis-ci.org/ysmood/noflow.svg)](https://travis-ci.org/ysmood/noflow) [![Build status](https://ci.appveyor.com/api/projects/status/github/ysmood/noflow?svg=true)](https://ci.appveyor.com/project/ysmood/noflow) [![Deps Up to Date](https://david-dm.org/ysmood/noflow.svg?style=flat)](https://david-dm.org/ysmood/noflow)
 
@@ -80,11 +80,10 @@ app.listen(8123);
 
 ### Routes
 
-You can write routes quickly by using select interface of [NoKit](https://github.com/ysmood/nokit). 
+You can write routes quickly by using select interface of [NoKit](https://github.com/ysmood/nokit).
 
 ```javascript
 import flow from "flow";
-import path from "path";
 import kit from "nokit";
 let { match, select } = kit.require("proxy");
 
@@ -105,12 +104,6 @@ app.push(
             method: /GET|POST/ // route both GET and POST
         },
         $ => $.body = $.method + " " + $.url
-    ),
-
-    select(
-        // route js only
-        { url: url => path.extname(url) === ".js" ? "js" : null },
-        $ => $.body = $.url
     ),
 
     select(
