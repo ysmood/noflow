@@ -78,6 +78,85 @@ app.push(
 app.listen(8123);
 ```
 
+### Routes
+
+You can write routes quickly by using select interface of [NoKit](https://github.com/ysmood/nokit). 
+
+```javascript
+import flow from "flow";
+import path from "path";
+import kit from "nokit";
+let { match, select } = kit.require("proxy");
+
+let app = flow();
+
+app.push(
+    select({ url: "/test" }, $ => $.body = $.url),
+
+    select(
+        // Express.js like url selector.
+        { url: match("/items/:id") },
+        $ => $.body = $.url.id
+    ),
+
+    select(
+        {
+            url: "/api",
+            method: /GET|POST/ // route both GET and POST
+        },
+        $ => $.body = $.method + " " + $.url
+    ),
+
+    select(
+        // route js only
+        { url: url => path.extname(url) === ".js" ? "js" : null },
+        $ => $.body = $.url
+    ),
+
+    select(
+        {
+            // route some special headers
+            headers: {
+                host: "a.com"
+            }
+        },
+        $ => $.body = "ok"
+    )
+);
+
+app.listen(8123);
+```
+
+### Express middleware
+
+It's easy to convert an express middleware to noflow middleware.
+
+```javascript
+import flow from "noflow";
+import bodyParser from "body-parser";
+
+let app = flow();
+
+let convert = (h) => ({ req, res, next }) =>
+    new Promise((resolve, reject) =>
+        h(req, res, (err) => {
+            if (err)
+                return reject(err);
+            else
+                return next().then(resolve);
+        })
+    );
+
+app.push(
+    convert(bodyParser.json()),
+    $ => {
+        $.body = $.req.body;
+    }
+);
+
+app.listen(8123);
+```
+
 # API
 
 <%= doc['src/index.js'] %>
