@@ -12,7 +12,7 @@ async function main () {
     let reg = new RegExp(process.env.pattern);
 
     // load all the test file.
-    await it.async(
+    await it.run(
         paths
         .map(p => kit.path.resolve(p))
         .reduce(
