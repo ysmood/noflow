@@ -60,12 +60,12 @@ export default ({
         let c = "";
 
         let p1 = new Promise((resolve) => {
-                    setTimeout(() => resolve("p1"), 200);
-                });
+            setTimeout(() => resolve("p1"), 200);
+        });
 
         let p2 = new Promise((resolve) => {
-                    setTimeout(() => resolve("p2"), 100);
-                });
+            setTimeout(() => resolve("p2"), 100);
+        });
 
         app.push(
             async ($) => {
@@ -91,12 +91,12 @@ export default ({
         let c = "";
 
         let p1 = new Promise((resolve) => {
-                    setTimeout(() => resolve("p1"), 100);
-                });
+            setTimeout(() => resolve("p1"), 100);
+        });
 
         let p2 = new Promise((resolve) => {
-                    setTimeout(() => resolve("p2"), 200);
-                });
+            setTimeout(() => resolve("p2"), 200);
+        });
 
         app.push(
             async ($) => {
