@@ -5,20 +5,14 @@ let { _ } = kit;
 let br = kit.require("brush");
 
 export default (task, option) => {
-    option("-t <.*>", "unit test regex filter", ".*");
-    function test (pattern) {
-        return kit.spawn(
-            "babel-node",
-            ["test/index.js"],
-            { env: _.assign(process.env, { pattern: pattern }) }
-        );
-    }
 
-    option("-n <examples/basic>", "example file name", "examples/basic");
+    option("-n, --name <examples/basic>", "example file name", "examples/basic");
+    option("-g, --grep <.*>", "unit test regex filter", ".*");
+
     task("default", "run an example", (opts) => {
         kit.monitorApp({
             bin: "babel-node",
-            args: [opts.N],
+            args: [opts.name],
             watchList: ["examples/**/*.js", "src/**/*.js"]
         });
     });
@@ -34,16 +28,14 @@ export default (task, option) => {
         return kit.spawn("babel", ["src", "--out-dir", "lib"]);
     });
 
-    task("watch-test", "run & watch test api", (opts) => {
-        function handler (path, curr, prev, isDel) {
-            kit.logs(br.cyan("modifed:"), path);
-            kit.logs(br.cyan("***** run unit tests *****"));
-            if (!isDel) test(opts.T).catch(_.noop);
-        }
-
-        handler(".");
-        kit.watchFiles("{test,src}/**/*.js", { handler: handler });
-    });
+    task("watch-test", "run & watch test api", (opts) =>
+        kit.spawn("junit", [
+            "-s", "test/testSuit/index.js",
+            "-g", opts.grep,
+            "-w", "{src,test}/**/*.js",
+            "test/*.js"
+        ])
+    );
 
     task("lint", "lint all code of this project", () => {
         function lint (f) {
@@ -54,11 +46,13 @@ export default (task, option) => {
         return kit.warp("{examples,src,test}/**/*.js").load(lint).run();
     });
 
-    task("test", ["lint"], "run test once", () => {
-        test(".*").catch((res) => {
-            process.exit(res.code);
-        });
-    });
+    task("test", ["lint"], "run test once", (opts) =>
+        kit.spawn("junit", [
+            "-s", "test/testSuit/index.js",
+            "-g", opts.grep,
+            "test/*.js"
+        ])
+    );
 
     task("benchmark", "run benchmark", () => {
         var paths = kit.globSync("benchmark/basic/*.js");
