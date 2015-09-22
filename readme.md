@@ -196,7 +196,7 @@ app.listen(8123);
         or an object with the same type with `body`.
         If the middleware has async operation inside, it should return a promise.
         The promise can reject an error with a http `statusCode` property.
-        The members of `$`:
+        The members of `$`, FlowContext:
         ```js
         {
             // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
