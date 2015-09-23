@@ -40,7 +40,7 @@
     "body-parser": "1.14.0",
     "eslint": "1.5.1",
     "junit": "0.6.1",
-    "nokit": "0.14.4",
+    "nokit": "0.14.7",
     "path-to-regexp": "1.2.1"
   },
   "eslintConfig": {

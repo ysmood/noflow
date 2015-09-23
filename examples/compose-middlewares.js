@@ -13,7 +13,7 @@ let parseQuery = async $ => {
 // Only the selected url will waste CPU to parse the url.
 app.push(
     select(
-        { url: "/item" },
+        "/item",
 
         // Here we use sub-route to compose two middlewares.
         flow(parseQuery, $ => $.body = $.query.id)

@@ -7,7 +7,7 @@ let app = flow();
 
 app.push(
     // Such as "/path?id=10&name=jack"
-    select({ url: "/path" }, $ => {
+    select("/path", $ => {
         let url = parse($.req.url, true);
         // Here the body will be "10 - jack".
         $.body = `${url.query.id} - ${url.query.name}`;

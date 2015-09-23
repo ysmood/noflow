@@ -6,7 +6,7 @@ let { match, select } = kit.require("proxy");
 let app = flow();
 
 app.push(
-    select({ url: "/test" }, $ => $.body = $.url),
+    select("/test", $ => $.body = $.url),
 
     select(
         // Express.js like url selector.
