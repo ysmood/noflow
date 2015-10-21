@@ -1,6 +1,6 @@
 # Changelog
 
-- v0.5.4
+- v0.5.5
 
   - upd: deps
 

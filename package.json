@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "A minimal middleware composer for the future.",
   "main": "lib/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/ysmood/noflow",
   "dependencies": {
-    "yaku": "0.11.0"
+    "yaku": "0.11.1"
   },
   "devDependencies": {
     "babel": "5.8.23",
@@ -40,7 +40,7 @@
     "body-parser": "1.14.1",
     "eslint": "1.7.2",
     "junit": "0.6.1",
-    "nokit": "0.14.7",
+    "nokit": "0.14.8",
     "path-to-regexp": "1.2.1"
   },
   "eslintConfig": {
