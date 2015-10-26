@@ -1,4 +1,6 @@
-export default ({
+import testSuit from "./testSuit";
+
+export default testSuit("compose", ({
     it, request, eq, flow
 }) => [
 
@@ -116,4 +118,4 @@ export default ({
 
     })
 
-];
+]);

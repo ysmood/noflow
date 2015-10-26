@@ -1,4 +1,6 @@
-export default ({
+import testSuit from "./testSuit";
+
+export default testSuit("basic", ({
     it, request, eq, flow, kit
 }) => [
 
@@ -135,4 +137,4 @@ export default ({
             buf
         );
     })
-];
+]);

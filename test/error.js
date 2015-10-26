@@ -1,4 +1,6 @@
-export default ({
+import testSuit from "./testSuit";
+
+export default testSuit("error", ({
     it, request, eq, flow
 }) => [
 
@@ -78,4 +80,4 @@ export default ({
 
         return eq(body, "time out");
     })
-];
+]);

@@ -1,7 +1,6 @@
 import kit from "nokit";
 import flow from "../../src";
 let { _ } = kit;
-let bname = kit.path.basename;
 global.Promise = kit.Promise;
 
 /**
@@ -28,18 +27,14 @@ let request = (app) => async (opts) => {
     return res;
 };
 
-let titlize = (path, it) => {
-    let title = bname(path, ".js");
-
-    return (msg, fn) => {
-        return it(`${title}: ${msg}`, fn);
-    };
-};
-
-export default (it, path) => ({
-    flow,
-    kit,
-    eq: it.eq,
-    it: titlize(path, it),
-    request
-});
+export default (title, fn) =>
+    (it) =>
+        it.describe(title, (it) =>
+            fn({
+                flow,
+                kit,
+                eq: it.eq,
+                it,
+                request
+            })
+        );

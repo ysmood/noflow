@@ -28,7 +28,6 @@ export default (task, option) => {
 
     task("watch-test", "run & watch test api", (opts) =>
         kit.spawn("junit", [
-            "-s", "test/testSuit/index.js",
             "-g", opts.grep,
             "-w", "{src,test}/**/*.js",
             "test/*.js"
@@ -46,7 +45,6 @@ export default (task, option) => {
 
     task("test", ["lint"], "run test once", (opts) =>
         kit.spawn("junit", [
-            "-s", "test/testSuit/index.js",
             "-g", opts.grep,
             "test/*.js"
         ])
