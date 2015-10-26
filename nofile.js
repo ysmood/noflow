@@ -1,8 +1,6 @@
 "use strict";
 
 import kit from "nokit";
-let { _ } = kit;
-let br = kit.require("brush");
 
 export default (task, option) => {
 
