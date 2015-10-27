@@ -15,9 +15,6 @@ import utils from "./utils";
  *     listen: (port) => Promise,
  *
  *     close: (cb) => Promise,
- *
- *     // The http `requestListener` of the Node native `http.createServer`.
- *     listener: (req ,res) => undefined
  * }
  * ```
  * @example
@@ -34,22 +31,11 @@ var app = function () {
     }
 
     var routes = [];
+    var server = http.createServer(flow(routes));
 
-    routes.listener = flow(routes);
-
-    routes.listen = function () {
-        routes.server = http.createServer(routes.listener);
-
-        return utils.yutils.promisify(
-            routes.server.listen, routes.server
-        ).apply(0, arguments);
-    };
-
-    routes.close = function () {
-        return utils.yutils.promisify(
-            routes.server.close, routes.server
-        ).apply(0, arguments);
-    };
+    routes.server = server;
+    routes.listen = utils.yutils.promisify(server.listen, server);
+    routes.close = utils.yutils.promisify(server.close, server);
 
     return routes;
 };

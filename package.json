@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "A minimal middleware composer for the future.",
   "main": "lib/index.js",
   "scripts": {
@@ -40,7 +40,7 @@
     "body-parser": "1.14.1",
     "eslint": "1.7.3",
     "junit": "0.8.1",
-    "nokit": "0.14.9",
+    "nokit": "0.14.10",
     "path-to-regexp": "1.2.1"
   },
   "eslintConfig": {

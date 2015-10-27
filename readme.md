@@ -152,7 +152,7 @@ app.listen(8123);
 
 # API
 
-- ## **[app](src/index.js?source#L31)**
+- ## **[app](src/index.js?source#L28)**
 
     Create an array instance with some handy server helper methods.
 
@@ -167,9 +167,6 @@ app.listen(8123);
             listen: (port) => Promise,
 
             close: (cb) => Promise,
-
-            // The http `requestListener` of the Node native `http.createServer`.
-            listener: (req ,res) => undefined
         }
         ```
 
