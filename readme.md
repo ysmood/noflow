@@ -181,7 +181,7 @@ app.listen(8123);
 
 
 
-- ## **[flow(middlewares)](src/flow.js?source#L57)**
+- ## **[flow(middlewares)](src/flow.js?source#L58)**
 
     A promise based function composer.
 
@@ -192,15 +192,16 @@ app.listen(8123);
         Each item is a function `($) => Promise | Any`,
         or an object with the same type with `body`.
         If the middleware has async operation inside, it should return a promise.
-        The promise can reject an error with a http `statusCode` property.
         The members of `$`, FlowContext:
         ```js
         {
             // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
             body: Any,
 
+            // https://nodejs.org/api/http.html#http_http_incomingmessage
             req: http.IncomingMessage,
 
+            // https://nodejs.org/api/http.html#http_http_incomingmessage
             res: http.IncomingMessage,
 
             // It returns a promise which settles after all the next middlewares are setttled.
