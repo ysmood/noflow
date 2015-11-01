@@ -9,11 +9,13 @@ import utils from "./utils";
  * @type {Array} Members:
  * ```js
  * {
+ *     // https://nodejs.org/api/http.html#http_class_http_server
  *     server: http.Server,
  *
- *     // http.Server.prototype.listen, but returns a promise instead.
+ *     // https://nodejs.org/api/http.html#http_server_listen_port_hostname_backlog_callback
  *     listen: (port) => Promise,
  *
+ *     // https://nodejs.org/api/http.html#http_server_close_callback
  *     close: (cb) => Promise,
  * }
  * ```
