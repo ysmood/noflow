@@ -83,7 +83,7 @@ app.listen(8123);
 You can write routes quickly by using select interface of [NoKit](https://github.com/ysmood/nokit).
 
 ```javascript
-import flow from "flow";
+import flow from "noflow";
 import kit from "nokit";
 let { match, select } = kit.require("proxy");
 
