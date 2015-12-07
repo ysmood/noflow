@@ -1,6 +1,7 @@
 # NoFlow
 
-A minimal middleware composer for the future.
+A minimal server middleware composer for the future.
+It's mostly used to create http server, handle proxy, etc.
 The interesting part is that it also works fine without any ES6 or ES7 syntax,
 it's up to you to decide how fancy it will be. And because it's middlewares are just normal
 functions, they can be easily composed with each other.
