@@ -1,4 +1,4 @@
-var flow = require("../../lib").default;
+var flow = require("../../lib");
 var port = process.argv[2];
 
 var app = flow();

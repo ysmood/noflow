@@ -8,6 +8,14 @@ functions, they can be easily composed with each other.
 
 To use noflow, you only have to remember a single rule "Any async function should and will return a Promise.".
 
+# Features
+
+- Super lightweight, only one dependency, 200 sloc, learn it in 5 minutes
+- Faster than Express.js and Koa, see the benchmark section
+- Based on Promise, works well with async/await
+- Supports almost all exist Express-like middlewares
+
+
 **For examples, goto folder [examples](examples)**.
 
 To run the examples, you have to install the dependencies of this project: `npm i`.
@@ -175,11 +183,11 @@ let app = flow();
 
 app.push(
     select(
-        { url: "/a" },
+        "/a",
         kit.readJson("a.json") // readJson returns a Promise
     ),
 
-    select({ url: "/b" }, async $ => {
+    select("/b", async $ => {
         let txt = await kit.readFile("b.txt");
         let data = await kit.request("http://test.com/" + $.url);
         $.body = txt + data;
@@ -189,4 +197,17 @@ app.push(
 app.listen(8123).then(() => {
     kit.request('127.0.0.1:8123/a').then(kit.logs);
 });
+```
+
+# Benchmark
+
+These comparisons only reflect some limited truth, no one is better than all others on all aspects.
+You can run it yourself in terminal: `npm run no -- benchmark`.
+
+```
+Node v5.4.0
+The less the better:
+noflow: 1839.333ms
+koa: 2598.171ms
+express: 3239.013ms
 ```

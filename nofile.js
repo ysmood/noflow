@@ -55,8 +55,11 @@ export default (task, option) => {
     );
 
     task("benchmark", "run benchmark", () => {
+        process.env.NODE_ENV = "production";
         var paths = kit.globSync("benchmark/basic/*.js");
         var port = 3120;
+        console.log(`Node ${process.version}`);
+        console.log(`The less the better:`);
         return kit.flow(paths.reverse().map((path) => {
             return async () => {
                 var p = port++;
