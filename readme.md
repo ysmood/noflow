@@ -270,11 +270,11 @@ let app = flow();
 
 app.push(
     select(
-        { url: "/a" },
+        "/a",
         kit.readJson("a.json") // readJson returns a Promise
     ),
 
-    select({ url: "/b" }, async $ => {
+    select("/b", async $ => {
         let txt = await kit.readFile("b.txt");
         let data = await kit.request("http://test.com/" + $.url);
         $.body = txt + data;
