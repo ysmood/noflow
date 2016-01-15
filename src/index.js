@@ -1,8 +1,8 @@
 "use strict";
 
-import http from "http";
-import flow from "./flow";
-import utils from "./utils";
+var http = require("http");
+var flow = require("./flow");
+var utils = require("./utils");
 
 /**
  * Create an array instance with some handy server helper methods.
@@ -44,4 +44,4 @@ var app = function () {
 
 utils.assign(app, utils);
 
-export default app;
+module.exports = app;

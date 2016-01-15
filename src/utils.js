@@ -1,9 +1,9 @@
 "use strict";
 
-import Promise from "yaku";
-import yutils from "yaku/lib/utils";
+var Promise = require("yaku");
+var yutils = require("yaku/lib/utils");
 
-export default {
+module.exports = {
 
     /**
      * The promise class that noflow uses: [Yaku](https://github.com/ysmood/yaku)
@@ -17,22 +17,17 @@ export default {
      */
     yutils: yutils,
 
-    isFunction (value) {
+    isFunction: function (value) {
         return typeof value === "function";
     },
 
-    isArray (value) {
+    isArray: function (value) {
         return value instanceof Array;
     },
 
-    assign (src, ...dests) {
-        var len = dests.length;
-        var dest;
-        for (var i = 0; i < len; i++) {
-            dest = dests[i];
-            for (var k in dest) {
-                src[k] = dest[k];
-            }
+    assign: function (src, dest) {
+        for (var k in dest) {
+            src[k] = dest[k];
         }
         return src;
     }

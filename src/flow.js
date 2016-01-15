@@ -4,11 +4,12 @@
     For the sake of performance don't use `let` key word here.
  */
 
-import utils from "./utils";
-import http from "http";
-import Stream from "stream";
+var utils = require("./utils");
+var http = require("http");
+var Stream = require("stream");
 
-var { Promise, isFunction } = utils;
+var Promise = utils.Promise;
+var isFunction = utils.isFunction;
 
 /**
  * A promise based function composer.
@@ -55,7 +56,7 @@ var { Promise, isFunction } = utils;
  * app.listen(8123);
  * ```
  */
-var flow = (middlewares) => (req, res) => {
+var flow = function (middlewares) { return function (req, res) {
     var $, parentNext, next;
 
     // If it comes from a http listener, else it comes from a sub noflow.
@@ -72,7 +73,7 @@ var flow = (middlewares) => (req, res) => {
     var index = 0;
 
     // Wrap the next middleware.
-    $.next = next = () => {
+    $.next = next = function () {
         var mid = middlewares[index++];
         if (mid === undefined) {
             // TODO: #4
@@ -100,18 +101,18 @@ var flow = (middlewares) => (req, res) => {
     // The root middleware will finnally end the entire $ peacefully.
     if (!parentNext) {
         return promise
-        .then(() => endCtx($))
-        .catch(err => errorAndEndCtx(err, $));
+        .then(function () { return endCtx($); })
+        .catch(function (err) { return errorAndEndCtx(err, $); });
     }
 
     return promise;
-};
+}; };
 
 // Convert anything to a middleware function.
 function ensureMid (mid) {
     if (isFunction(mid)) return mid;
 
-    return $ => { $.body = mid; };
+    return function ($) { $.body = mid; };
 }
 
 // for better performance, hack v8.
@@ -165,7 +166,7 @@ function endCtx ($) {
         } else if (body instanceof Buffer) {
             endRes($, body);
         } else if (isFunction(body.then)) {
-            return body.then((data) => {
+            return body.then(function (data) {
                 $.body = data;
                 return endCtx($);
             });
@@ -209,11 +210,11 @@ function error404 ($) {
     $.body = http.STATUS_CODES[$.res.statusCode];
 }
 
-export default function (middlewares) {
+module.exports = function (middlewares) {
     // Make sure we pass in an array
     if (!utils.isArray(middlewares)) {
         middlewares = [].slice.call(arguments);
     }
 
     return flow(middlewares);
-}
+};

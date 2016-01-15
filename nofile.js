@@ -15,7 +15,7 @@ export default (task, option) => {
         });
     });
 
-    task("build-docs", "build readme.md", () => {
+    task("build-docs", ["clean"], "build readme.md", () => {
         return kit.warp("src/**/*.js")
         .load(
             kit.drives.comment2md({ h: 2, tpl: "doc/readme.jst.md" })
@@ -23,7 +23,11 @@ export default (task, option) => {
     });
 
     task("build", ["build-docs"], "build src from es6 to es5", () => {
-        return kit.spawn("babel", ["src", "--out-dir", "lib"]);
+        return kit.copy("src/**", "lib");
+    });
+
+    task("clean", "clean", () => {
+        return kit.remove("lib");
     });
 
     task("watch-test", "run & watch test api", (opts) =>

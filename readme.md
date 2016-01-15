@@ -184,7 +184,7 @@ app.listen(8123);
 
 
 
-- ## **[flow(middlewares)](src/flow.js?source#L58)**
+- ## **[flow(middlewares)](src/flow.js?source#L59)**
 
     A promise based function composer.
 
@@ -270,11 +270,11 @@ let app = flow();
 
 app.push(
     select(
-        "/a",
+        { url: "/a" },
         kit.readJson("a.json") // readJson returns a Promise
     ),
 
-    select("/b", async $ => {
+    select({ url: "/b" }, async $ => {
         let txt = await kit.readFile("b.txt");
         let data = await kit.request("http://test.com/" + $.url);
         $.body = txt + data;
