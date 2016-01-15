@@ -2,7 +2,7 @@ import testSuit from "./testSuit";
 
 export default testSuit("compose", ({
     it, request, eq, flow
-}) => [
+}) => {
 
     it("basic", async () => {
         let app = flow();
@@ -21,7 +21,7 @@ export default testSuit("compose", ({
         );
 
         return eq(await request(app)(), "4");
-    }),
+    });
 
     it("arguments", async () => {
         let app = flow();
@@ -35,7 +35,7 @@ export default testSuit("compose", ({
         );
 
         return eq(await request(app)(), "final");
-    }),
+    });
 
     it("parent catch composed error", async () => {
         let app = flow();
@@ -54,7 +54,7 @@ export default testSuit("compose", ({
         );
 
         return eq(await request(app)(), "catch err");
-    }),
+    });
 
     it("order by decreasing time", async () => {
         let app = flow();
@@ -85,7 +85,7 @@ export default testSuit("compose", ({
 
         return eq(await request(app)(), "p1p2");
 
-    }),
+    });
 
     it("order by increasing time", async () => {
         let app = flow();
@@ -116,6 +116,6 @@ export default testSuit("compose", ({
 
         return eq(await request(app)(), "p1p2");
 
-    })
+    });
 
-]);
+});

@@ -2,7 +2,7 @@ import testSuit from "./testSuit";
 
 export default testSuit("error", ({
     it, request, eq, flow
-}) => [
+}) => {
 
     it("basic", async () => {
         let app = flow();
@@ -21,7 +21,7 @@ export default testSuit("error", ({
         );
 
         return eq(await request(app)(), "catch:error");
-    }),
+    });
 
     it("status code 500 with error message", async () => {
         let app = flow();
@@ -35,7 +35,7 @@ export default testSuit("error", ({
         let res = await request(app)({ url: "/", body: false });
 
         return eq([res.statusCode, res.body], [500, "error"]);
-    }),
+    });
 
     it("status code 500 with circle body object", async () => {
         let app = flow();
@@ -48,13 +48,13 @@ export default testSuit("error", ({
         let res = await request(app)({ url: "/", body: false });
 
         return eq([res.statusCode], [500]);
-    }),
+    });
 
     it("status code 400 with missing middlewares", async () => {
         let app = flow();
         let res = await request(app)({ url: "/", body: false });
         return eq([res.statusCode], [404]);
-    }),
+    });
 
     // TODO: move to middlewares independently
     it("timeout", async () => {
@@ -79,5 +79,5 @@ export default testSuit("error", ({
         let body = await request(app)();
 
         return eq(body, "time out");
-    })
-]);
+    });
+});
