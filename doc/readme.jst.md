@@ -3,10 +3,10 @@
 A minimal server middleware composer for the future.
 It's mostly used to create http server, handle proxy, etc.
 The interesting part is that it also works fine without any ES6 or ES7 syntax,
-it's up to you to decide how fancy it will be. And because it's middlewares are just normal
+it's up to you to decide how fancy it will be. And because its middlewares are just normal
 functions, they can be easily composed with each other.
 
-To use noflow, you only have to remember a single rule "Any async function should and will return a Promise.".
+To use noflow, you only have to remember a single rule "Any async function should and will return a Promise".
 
 # Features
 
@@ -166,6 +166,75 @@ app.listen(8123);
 <%= doc['src/flow.js'] %>
 
 <%= doc['src/utils.js'] %>
+
+
+# Status code
+
+Noflow will auto handle status code `200`, `204`, `404` and `500` for you only if
+you haven't set the status code yourself.
+
+- `204`: If you don't set `$.body`, such as it's `null` or `undefined`.
+
+- `404`: If no middleware found.
+
+- `500`: If any middleware reject or throws an error.
+
+- `userDefined`: If user set the `$.res.statusCode` manually.
+
+- `200`: If none of the above happens.
+
+
+# Error handling
+
+A middleware can catch all the errors of the middlewares after it.
+
+With ES5, you can use it like normal promise error handling:
+
+```js
+var flow = require("noflow");
+
+var app = flow();
+
+app.push(function ($) {
+    return $.next().catch(function (e) {
+        $.body = e;
+    });
+});
+
+app.push(function () {
+    throw "error";
+});
+
+app.push(function () {
+    // Same with the `throw "error"`
+    return Promise.reject("error");
+});
+
+app.listen(8123);
+```
+
+With ES7, you can use try-catch directly:
+
+```js
+import flow from "noflow";
+
+let app = flow();
+
+app.push(async ($) => {
+    try {
+        await $.next();
+    } catch (e) {
+        $.body = e;
+    }
+});
+
+app.push(() => {
+    throw "error";
+});
+
+app.listen(8123);
+```
+
 
 # [NoKit](https://github.com/ysmood/nokit)
 

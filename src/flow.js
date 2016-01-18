@@ -31,7 +31,7 @@ var isFunction = utils.isFunction;
  *     res: http.IncomingMessage,
  *
  *     // It returns a promise which settles after all the next middlewares are setttled.
- *     next: => Promise
+ *     next: () => Promise
  * }
  * ```
  * @return {Function} `(req, res) => Promise | Any` or `($) => Promise`.

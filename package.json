@@ -18,6 +18,8 @@
   "keywords": [
     "api",
     "app",
+    "server",
+    "http",
     "router",
     "web",
     "promise",

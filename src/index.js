@@ -1,12 +1,12 @@
 "use strict";
 
 var http = require("http");
-var flow = require("./flow");
+var _flow = require("./flow");
 var utils = require("./utils");
 
 /**
  * Create an array instance with some handy server helper methods.
- * @type {Array} Members:
+ * @return {Array} Members:
  * ```js
  * {
  *     // https://nodejs.org/api/http.html#http_class_http_server
@@ -27,13 +27,13 @@ var utils = require("./utils");
  * app.listen(8123).then(() => console.log("started"));
  * ```
  */
-var app = function () {
+var flow = function () {
     if (arguments.length > 0) {
-        return flow.apply(0, arguments);
+        return _flow.apply(0, arguments);
     }
 
     var routes = [];
-    var server = http.createServer(flow(routes));
+    var server = http.createServer(_flow(routes));
 
     routes.server = server;
     routes.listen = utils.yutils.promisify(server.listen, server);
@@ -42,6 +42,6 @@ var app = function () {
     return routes;
 };
 
-utils.assign(app, utils);
+utils.assign(flow, utils);
 
-module.exports = app;
+module.exports = flow;
