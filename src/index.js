@@ -1,6 +1,5 @@
 "use strict";
 
-var http = require("http");
 var _flow = require("./flow");
 var utils = require("./utils");
 
@@ -33,7 +32,7 @@ var flow = function () {
     }
 
     var routes = [];
-    var server = http.createServer(_flow(routes));
+    var server = require("http").createServer(_flow(routes));
 
     routes.server = server;
     routes.listen = utils.yutils.promisify(server.listen, server);

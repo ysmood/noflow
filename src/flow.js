@@ -5,7 +5,7 @@
  */
 
 var utils = require("./utils");
-var http = require("http");
+var STATUS_CODES = require("http").STATUS_CODES;
 var Stream = require("stream");
 
 var Promise = utils.Promise;
@@ -192,7 +192,7 @@ function errorAndEndCtx (err, $) {
     setStatusCode($.res, 500);
 
     if (process.env.NODE_ENV === "production") {
-        $.body = http.STATUS_CODES[$.res.statusCode];
+        $.body = STATUS_CODES[$.res.statusCode];
     } else {
         // print the error details
         if (err instanceof Error)
@@ -207,7 +207,7 @@ function errorAndEndCtx (err, $) {
 
 function error404 ($) {
     setStatusCode($.res, 404);
-    $.body = http.STATUS_CODES[$.res.statusCode];
+    $.body = STATUS_CODES[$.res.statusCode];
 }
 
 module.exports = function (middlewares) {

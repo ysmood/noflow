@@ -1,4 +1,5 @@
 import testSuit from "./testSuit";
+import https from "https";
 
 export default testSuit("basic", ({
     it, request, eq, flow, kit
@@ -136,5 +137,31 @@ export default testSuit("basic", ({
             await request(app)({url: "/", resEncoding: null }),
             buf
         );
+    });
+
+    it("should work with https", async (after) => {
+        let opts = {
+            key: kit.readFileSync("test/testSuit/server.key"),
+            cert: kit.readFileSync("test/testSuit/server.crt")
+        };
+
+        let server;
+
+        after(() => {
+            server.close();
+        });
+
+        return new Promise((resolve) => {
+            server = https.createServer(opts, flow(["hello world"]))
+            .listen(0, () => {
+                let { port } = server.address();
+
+                resolve(it.eq(kit.request({
+                    url: `https://127.0.0.1:${port}`,
+                    rejectUnauthorized: false
+                }), "hello world"));
+            });
+        });
+
     });
 });
