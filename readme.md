@@ -47,7 +47,7 @@ app.listen(8123);
 Without ES7, you can still have all the good stuffs of Noflow.
 
 ```javascript
-var flow = require("noflow").default;
+var flow = require("noflow");
 
 var app = flow();
 
@@ -161,7 +161,7 @@ app.listen(8123);
 
 # API
 
-- ## **[flow()](src/index.js?source#L30)**
+- ## **[flow()](src/index.js?source#L29)**
 
     Create an array instance with some handy server helper methods.
 

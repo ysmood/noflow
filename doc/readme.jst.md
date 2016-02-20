@@ -47,7 +47,7 @@ app.listen(8123);
 Without ES7, you can still have all the good stuffs of Noflow.
 
 ```javascript
-var flow = require("noflow").default;
+var flow = require("noflow");
 
 var app = flow();
 
