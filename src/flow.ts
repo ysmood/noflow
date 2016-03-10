@@ -1,15 +1,37 @@
+/// <reference path="./node.d.ts" />
+
 "use strict";
 
 /*
     For the sake of performance don't use `let` key word here.
  */
 
-var utils = require("./utils");
-var STATUS_CODES = require("http").STATUS_CODES;
-var Stream = require("stream");
+import { isFunction, isArray } from "./utils";
+import * as http from "http";
+import { Stream } from "stream";
+import Promise from "yaku";
 
-var Promise = utils.Promise;
-var isFunction = utils.isFunction;
+var { STATUS_CODES } = http;
+
+
+export interface Context {
+    body: String | Buffer | Stream | Promise<any> | any
+    
+    req: http.IncomingMessage
+    
+    res: http.ServerResponse
+    
+    next: () => Promise<any>
+}
+
+export interface Middleware {
+    ($: Context): Promise<any> | any
+}
+
+export interface FlowHandler extends Middleware {
+    (req: http.IncomingMessage, res: http.ServerResponse): Promise<any>
+}
+
 
 /**
  * A promise based function composer.
@@ -56,12 +78,12 @@ var isFunction = utils.isFunction;
  * app.listen(8123);
  * ```
  */
-var flow = function (middlewares) { return function (req, res) {
-    var $, parentNext, next;
+var flow = function (middlewares: Array<Middleware>): FlowHandler { return function (req, res?) {
+    var $: Context, parentNext, next;
 
     // If it comes from a http listener, else it comes from a sub noflow.
     if (res) {
-        $ = { req: req, res: res };
+        $ = { req: req, res: res, next: null, body: null };
     } else {
         $ = req;
         parentNext = $.next;
@@ -73,7 +95,7 @@ var flow = function (middlewares) { return function (req, res) {
     var index = 0;
 
     // Wrap the next middleware.
-    $.next = next = function () {
+    next = $.next = function () {
         var mid = middlewares[index++];
         if (mid === undefined) {
             // TODO: #4
@@ -89,7 +111,7 @@ var flow = function (middlewares) { return function (req, res) {
 
         // Check if the fn has thrown error.
         if (ret === tryMid) {
-            return Promise.reject(tryMid.err);
+            return Promise.reject(tryMidErr);
         } else {
             return Promise.resolve(ret);
         }
@@ -109,23 +131,24 @@ var flow = function (middlewares) { return function (req, res) {
 }; };
 
 // Convert anything to a middleware function.
-function ensureMid (mid) {
+function ensureMid (mid: Middleware) {
     if (isFunction(mid)) return mid;
 
-    return function ($) { $.body = mid; };
+    return function ($: Context) { $.body = mid; };
 }
 
 // for better performance, hack v8.
-function tryMid (fn, $) {
+var tryMidErr;
+function tryMid (fn: Middleware, $: Context) {
     try {
         return fn($);
     } catch (err) {
-        tryMid.err = err;
+        tryMidErr = err;
         return tryMid;
     }
 }
 
-function endRes ($, data, isStr) {
+function endRes ($: Context, data, isStr?: boolean) {
     var buf;
     if (isStr) {
         buf = new Buffer(data);
@@ -140,16 +163,16 @@ function endRes ($, data, isStr) {
     $.res.end(buf);
 }
 
-function setStatusCode (res, code) {
+function setStatusCode (res: http.ServerResponse, code: number) {
     if (res.statusCode === 200) res.statusCode = code;
 }
 
-function endEmpty (res) {
+function endEmpty (res: http.ServerResponse) {
     setStatusCode(res, 204);
     res.end();
 }
 
-function endCtx ($) {
+function endCtx ($: Context) {
     var body = $.body;
     var res = $.res;
 
@@ -188,7 +211,7 @@ function endCtx ($) {
     }
 }
 
-function errorAndEndCtx (err, $) {
+function errorAndEndCtx (err: Error | any, $: Context) {
     setStatusCode($.res, 500);
 
     if (process.env.NODE_ENV === "production") {
@@ -205,14 +228,14 @@ function errorAndEndCtx (err, $) {
     return endCtx($);
 }
 
-function error404 ($) {
+function error404 ($: Context) {
     setStatusCode($.res, 404);
     $.body = STATUS_CODES[$.res.statusCode];
 }
 
-module.exports = function (middlewares) {
+export default function (middlewares: Array<Middleware>) {
     // Make sure we pass in an array
-    if (!utils.isArray(middlewares)) {
+    if (!isArray(middlewares)) {
         middlewares = [].slice.call(arguments);
     }
 
