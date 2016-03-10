@@ -16,7 +16,7 @@ interface Fn {
  */
 let request = (app: Routes) => (opts) =>
     app.listen().then(() => {
-        let host = `http://127.0.0.1:${app.server.address().port}`;
+        let host = `http://127.0.0.1:${app.address().port}`;
         if (_.isString(opts))
             opts = `${host}${opts}`;
         else if (_.isUndefined(opts))

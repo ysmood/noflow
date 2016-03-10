@@ -27,7 +27,7 @@ export class Routes extends Array<Middleware> {
 
         this.server = http.createServer(_flow(this));
         this.listen = promisify(this.server.listen, this.server);
-        this.address = this.server.listen.bind(this.server);
+        this.address = this.server.address.bind(this.server);
         this.close = promisify(this.server.close, this.server);
     }
 
