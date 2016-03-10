@@ -37,13 +37,13 @@ export interface Context {
 
 }
 
-export interface MiddlewareFunction {
+export interface MiddlewareFn {
     ($: Context): Thenable<any> | any;
 }
 
-export type Middleware = MiddlewareFunction | Object;
+export type Middleware = MiddlewareFn | Object;
 
-export interface FlowHandler extends MiddlewareFunction {
+export interface FlowHandler extends MiddlewareFn {
     (req: http.IncomingMessage, res: http.ServerResponse): Promise<any>;
 }
 
@@ -125,14 +125,14 @@ let flow = function(middlewares: Array<Middleware>): FlowHandler {
 
 // Convert anything to a middleware function.
 function ensureMid(mid: Middleware) {
-    if (isFunction(mid)) return <MiddlewareFunction>mid;
+    if (isFunction(mid)) return <MiddlewareFn>mid;
 
     return function($: Context) { $.body = mid; };
 }
 
 // for better performance, hack v8.
 let tryMidErr;
-function tryMid(fn: MiddlewareFunction, $: Context): Thenable<any> | typeof tryMid {
+function tryMid(fn: MiddlewareFn, $: Context): Thenable<any> | typeof tryMid {
     try {
         return fn($);
     } catch (err) {

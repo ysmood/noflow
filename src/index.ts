@@ -2,22 +2,22 @@
 
 "use strict";
 
-import _flow, { Middleware, MiddlewareFunction, FlowHandler } from "./flow";
+import _flow, { Middleware, MiddlewareFn, FlowHandler } from "./flow";
 import * as http from "http";
 import promisify = require("yaku/lib/promisify");
-import { Thenable } from "yaku";
+import Promise from "yaku";
 
 export interface RoutesListen {
-    (): Thenable<http.Server>;
+    (): Promise<http.Server>;
 
-    (port: number, hostname?: string, backlog?: number): Thenable<http.Server>;
-    (port: number, hostname?: string): Thenable<http.Server>;
-    (path: string): Thenable<http.Server>;
-    (handle: any): Thenable<http.Server>;
+    (port: number, hostname?: string, backlog?: number): Promise<http.Server>;
+    (port: number, hostname?: string): Promise<http.Server>;
+    (path: string): Promise<http.Server>;
+    (handle: any): Promise<http.Server>;
 }
 
 export interface RoutesClose {
-    (): Thenable<http.Server>;
+    (): Promise<http.Server>;
 }
 
 export class Routes extends Array<Middleware> {
@@ -26,7 +26,6 @@ export class Routes extends Array<Middleware> {
         super();
 
         this.server = http.createServer(_flow(this));
-
         this.listen = promisify(this.server.listen, this.server);
         this.address = this.server.listen.bind(this.server);
         this.close = promisify(this.server.close, this.server);
@@ -34,7 +33,7 @@ export class Routes extends Array<Middleware> {
 
     server: http.Server;
 
-    address: { port: number; family: string; address: string; };
+    address: () => { port: number; family: string; address: string; };
 
     listen: RoutesListen;
 
@@ -42,8 +41,8 @@ export class Routes extends Array<Middleware> {
 
 }
 
-export type MiddlewareM = Middleware;
-export interface MiddlewareFunction extends MiddlewareFunction {};
+export type Middleware = Middleware;
+export interface MiddlewareFn extends MiddlewareFn {};
 
 export interface Flow {
     (): Routes;

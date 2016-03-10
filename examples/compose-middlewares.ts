@@ -1,11 +1,11 @@
-import flow, { MiddlewareFunction } from "../src";
+import flow, { MiddlewareFn } from "../src";
 import { parse } from "url";
 let kit = require("nokit");
 let { select } = kit.require("proxy");
 
 let app = flow();
 
-let parseQuery: MiddlewareFunction = $ => {
+let parseQuery: MiddlewareFn = $ => {
     $["query"] = parse($.req.url, true).query;
     return $.next();
 };
