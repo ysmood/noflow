@@ -11,6 +11,7 @@ To use noflow, you only have to remember a single rule "Any async function shoul
 # Features
 
 - Super lightweight, only one dependency, 200 sloc, learn it in 5 minutes
+- Static-typed with typescript
 - Faster than Express.js and Koa, see the benchmark section
 - Based on Promise, works well with async/await
 - Supports almost all exist Express-like middlewares
@@ -175,51 +176,6 @@ If you use typescript, you don't have to read the API below.
         app.push("OK");
         app.listen(8123).then(() => console.log("started"));
         ```
-
-
-
-- ## **[body](src/flow.ts?source#L21)**
-
-    It will be auto set as the response body.
-
-- ## **[req](src/flow.ts?source#L26)**
-
-    https://nodejs.org/api/http.html#http_http_incomingmessage
-
-- ## **[res](src/flow.ts?source#L31)**
-
-    https://nodejs.org/api/http.html#http_http_serverresponse
-
-- ## **[next](src/flow.ts?source#L36)**
-
-    It returns a promise which settles after all the next middlewares are setttled.
-
-- ## **[flow](src/flow.ts?source#L73)**
-
-    A promise based function composer.
-
-    - **<u>example</u>**:
-
-        Noflow encourages composition.
-        ```js
-        import flow from "noflow"
-        let app = flow();
-        let c = 0;
-        app.push(
-            $ => $.next(c++),
-            flow(
-                $ => $.next(c++),
-                flow(
-                    $ => $.next(c++),
-                    $ => $.next(c++)
-                )
-            ),
-            $ => $.body = c
-        );
-        app.listen(8123);
-        ```
-
-
 
 
 

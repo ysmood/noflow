@@ -11,6 +11,7 @@ To use noflow, you only have to remember a single rule "Any async function shoul
 # Features
 
 - Super lightweight, only one dependency, 200 sloc, learn it in 5 minutes
+- Static-typed with typescript
 - Faster than Express.js and Koa, see the benchmark section
 - Based on Promise, works well with async/await
 - Supports almost all exist Express-like middlewares
@@ -164,10 +165,6 @@ app.listen(8123);
 If you use typescript, you don't have to read the API below.
 
 <%= doc['src/index.ts'] %>
-
-<%= doc['src/flow.ts'] %>
-
-<%= doc['src/utils.ts'] %>
 
 
 # Status code
