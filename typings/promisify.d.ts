@@ -1,5 +1,8 @@
+
 declare module "yaku/lib/promisify" {
-    function self (...any): any
-    
+    import Promise from "yaku";
+
+    function self<T> (fn: T, thisArg?: any): Promise<T>
+
     export = self;
 }
