@@ -1,5 +1,9 @@
 # Changelog
 
+- v0.7
+
+  - **API CHANGE** For CommonJS require, you have to use `require("noflow").default`
+
 - v0.6.0
 
   - **API CHANGE** the `listener` api is removed

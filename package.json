@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.6.2",
+  "version": "0.7.1",
   "description": "A minimal server middleware composer for the future.",
   "main": "lib/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "url": "https://github.com/ysmood/noflow"
   },
   "files": [
-    "lib"
+    "lib", "src", "typeings"
   ],
   "keywords": [
     "api",
