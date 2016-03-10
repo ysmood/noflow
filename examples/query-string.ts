@@ -1,5 +1,5 @@
 import flow from "../src";
-import kit from "nokit";
+let kit = require("nokit");
 let { parse } = require("url");
 let { select } = kit.require("proxy");
 
@@ -15,14 +15,14 @@ app.push(
 );
 
 // Or you can create a middleware to parse query string for all followed middlewares.
-app.push(async $ => {
-    $.query = parse($.req.url, true).query;
-    await $.next();
+app.push($ => {
+    $["query"] = parse($.req.url, true).query;
+    return $.next();
 });
 
 // Now we can get the auto-parsed query string.
 app.push($ => {
-    $.body = $.query.id;
+    $.body = $["query"].id;
 });
 
 app.listen(8123);

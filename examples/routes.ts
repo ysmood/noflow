@@ -1,6 +1,6 @@
 import flow from "../src";
-import path from "path";
-import kit from "nokit";
+let path = require("path");
+let kit = require("nokit");
 let { match, select } = kit.require("proxy");
 
 let app = flow();

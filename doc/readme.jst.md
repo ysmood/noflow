@@ -47,7 +47,7 @@ app.listen(8123);
 Without ES7, you can still have all the good stuffs of Noflow.
 
 ```javascript
-var flow = require("noflow");
+var flow = require("noflow").default;
 
 var app = flow();
 
@@ -161,11 +161,13 @@ app.listen(8123);
 
 # API
 
-<%= doc['src/index.js'] %>
+If you use typescript, you don't have to read the API below.
 
-<%= doc['src/flow.js'] %>
+<%= doc['src/index.ts'] %>
 
-<%= doc['src/utils.js'] %>
+<%= doc['src/flow.ts'] %>
+
+<%= doc['src/utils.ts'] %>
 
 
 # Status code
@@ -191,7 +193,7 @@ A middleware can catch all the errors of the middlewares after it.
 With ES5, you can use it like normal promise error handling:
 
 ```js
-var flow = require("noflow");
+var flow = require("noflow").default;
 
 var app = flow();
 

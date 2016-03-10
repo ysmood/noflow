@@ -1,6 +1,6 @@
 import flow from "../src";
-import bodyParser from "body-parser";
-import kit from "nokit";
+let bodyParser = require("body-parser");
+let kit = require("nokit");
 let { midToFlow } = kit.require("proxy");
 
 let app = flow();
@@ -8,7 +8,7 @@ let app = flow();
 app.push(
     midToFlow(bodyParser.json()),
     $ => {
-        $.body = $.req.body;
+        $.body = $.req["body"];
     }
 );
 

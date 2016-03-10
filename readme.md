@@ -47,7 +47,7 @@ app.listen(8123);
 Without ES7, you can still have all the good stuffs of Noflow.
 
 ```javascript
-var flow = require("noflow");
+var flow = require("noflow").default;
 
 var app = flow();
 
@@ -161,25 +161,9 @@ app.listen(8123);
 
 # API
 
-- ## **[flow()](src/index.js?source#L29)**
+- ## **[flow](src/index.ts?source#L63)**
 
     Create an array instance with some handy server helper methods.
-
-    - **<u>return</u>**: { _Array_ }
-
-        Members:
-        ```js
-        {
-            // https://nodejs.org/api/http.html#http_class_http_server
-            server: http.Server,
-
-            // https://nodejs.org/api/http.html#http_server_listen_port_hostname_backlog_callback
-            listen: (port) => Promise,
-
-            // https://nodejs.org/api/http.html#http_server_close_callback
-            close: (cb) => Promise,
-        }
-        ```
 
     - **<u>example</u>**:
 
@@ -192,38 +176,25 @@ app.listen(8123);
 
 
 
-- ## **[flow(middlewares)](src/flow.js?source#L59)**
+- ## **[body](src/flow.ts?source#L21)**
+
+    It will be auto set as the response body.
+
+- ## **[req](src/flow.ts?source#L26)**
+
+    https://nodejs.org/api/http.html#http_http_incomingmessage
+
+- ## **[res](src/flow.ts?source#L31)**
+
+    https://nodejs.org/api/http.html#http_http_serverresponse
+
+- ## **[next](src/flow.ts?source#L36)**
+
+    It returns a promise which settles after all the next middlewares are setttled.
+
+- ## **[flow](src/flow.ts?source#L73)**
 
     A promise based function composer.
-
-    - **<u>param</u>**: `middlewares` { _Array_ }
-
-        If an non-array passed in, the whole arguments
-        of this function will be treated as the middleware array.
-        Each item is a function `($) => Promise | Any`,
-        or an object with the same type with `body`.
-        If the middleware has async operation inside, it should return a promise.
-        The members of `$`, FlowContext:
-        ```js
-        {
-            // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
-            body: Any,
-
-            // https://nodejs.org/api/http.html#http_http_incomingmessage
-            req: http.IncomingMessage,
-
-            // https://nodejs.org/api/http.html#http_http_incomingmessage
-            res: http.IncomingMessage,
-
-            // It returns a promise which settles after all the next middlewares are setttled.
-            next: () => Promise
-        }
-        ```
-
-    - **<u>return</u>**: { _Function_ }
-
-        `(req, res) => Promise | Any` or `($) => Promise`.
-        The http request listener or middleware.
 
     - **<u>example</u>**:
 
@@ -247,18 +218,6 @@ app.listen(8123);
         ```
 
 
-
-- ## **[Promise](src/utils.js?source#L12)**
-
-    The promise class that noflow uses: [Yaku](https://github.com/ysmood/yaku)
-
-    - **<u>type</u>**: { _Object_ }
-
-- ## **[yutils](src/utils.js?source#L18)**
-
-    The promise helpers: [Yaku Utils](https://github.com/ysmood/yaku#utils)
-
-    - **<u>type</u>**: { _Object_ }
 
 
 
@@ -286,7 +245,7 @@ A middleware can catch all the errors of the middlewares after it.
 With ES5, you can use it like normal promise error handling:
 
 ```js
-var flow = require("noflow");
+var flow = require("noflow").default;
 
 var app = flow();
 

@@ -3,8 +3,8 @@
  */
 
 import flow from "../src";
-import http from "http";
-import https from "https";
+let http = require("http");
+let https = require("https");
 import { readFileSync } from "fs";
 
 let opts = {

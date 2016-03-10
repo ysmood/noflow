@@ -1,8 +1,8 @@
 // This example is a proxy for both http, https and websocket, etc.
 // Set the system proxy to "127.0.0.1:8123", then have fun!
 
-import kit from "nokit";
 import flow from "../src";
+let kit = require("nokit");
 let proxy = kit.require("proxy");
 let app = flow();
 

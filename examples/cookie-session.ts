@@ -1,6 +1,6 @@
 import flow from "../src";
-import cookieSession from "cookie-session";
-import kit from "nokit";
+let cookieSession = require("cookie-session");
+let kit = require("nokit");
 let { midToFlow } = kit.require("proxy");
 
 let app = flow();
@@ -14,7 +14,7 @@ app.push(
     ),
 
     $ => {
-        let { session } = $.req;
+        let session = $.req["session"];
 
         if (session.count) {
             session.count++;

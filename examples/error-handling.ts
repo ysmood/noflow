@@ -2,9 +2,9 @@ import flow from "../src";
 
 let app = flow();
 
-app.push(async ($) => {
+app.push($ => {
     try {
-        await $.next();
+        return $.next();
     } catch (e) {
         $.body = e;
     }

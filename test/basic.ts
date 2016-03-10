@@ -1,4 +1,4 @@
-/// <reference path="../src/node.d.ts" />
+/// <reference path="../typings/node.d.ts" />
 
 import Promise from "yaku";
 import testSuit from "./testSuit";
@@ -19,8 +19,8 @@ module.exports = testSuit("basic", ({
     it("should print the 'hello world' by given handler", () => {
         let app = flow();
 
-        app.push((ctx) => {
-            ctx.body = "hello world";
+        app.push($ => {
+            $.body = "hello world";
         });
 
         return eq(request(app)(), "hello world");
@@ -32,8 +32,8 @@ module.exports = testSuit("basic", ({
 
         app.push(proxy.body());
 
-        app.push((ctx) => {
-            ctx.body = "echo:" + ctx.reqBody;
+        app.push($ => {
+            $.body = "echo:" + $["reqBody"];
         });
 
         return eq(
@@ -55,12 +55,12 @@ module.exports = testSuit("basic", ({
             }
         };
 
-        app.push((ctx) => {
-            ctx.body = obj;
+        app.push($ => {
+            $.body = obj;
         });
 
         return request(app)({url: "/"}).then((respObj) => {
-            return eq(obj, respObj);
+            return eq(obj, JSON.parse(respObj));
         });
     });
 
@@ -70,8 +70,8 @@ module.exports = testSuit("basic", ({
             prop1: 10
         };
 
-        app.push((ctx) => {
-            ctx.body = obj;
+        app.push($ => {
+            $.body = obj;
         });
 
         return request(app)({url: "/", body: false}).then((resp) => {
@@ -85,8 +85,8 @@ module.exports = testSuit("basic", ({
         let app = flow();
         let buf = new Buffer(FIX);
 
-        app.push((ctx) => {
-            ctx.body = buf;
+        app.push($ => {
+            $.body = buf;
         });
 
         return request(app)({url: "/", body: false}).then((resp) => {
@@ -106,8 +106,8 @@ module.exports = testSuit("basic", ({
     it("should echo the stream by given handler", () => {
         let app = flow();
 
-        app.push((ctx) => {
-            ctx.body = kit.createReadStream("package.json");
+        app.push($ => {
+            $.body = kit.createReadStream("package.json");
         });
 
         return eq(request(app)({url: "/", resEncoding: null }), kit.readFile("package.json"));
@@ -129,16 +129,16 @@ module.exports = testSuit("basic", ({
 
     it("should echo the buffer by given handler", () => {
         let app = flow();
-        
+
         return kit.readFile("package.json").then((buf) => {
-            app.push((ctx) => {
-                ctx.body = buf;
+            app.push($ => {
+                $.body = buf;
             });
 
             return eq(
                 request(app)({url: "/", resEncoding: null }),
                 buf
-            ); 
+            );
         })
     });
 

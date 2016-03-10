@@ -1,42 +1,53 @@
-/// <reference path="./promisify.d.ts" />
+/// <reference path="../typings/promisify.d.ts" />
 
 "use strict";
 
-import * as _flow from "./flow";
+import _flow, { Middleware, MiddlewareFunction, FlowHandler } from "./flow";
 import * as http from "http";
 import promisify = require("yaku/lib/promisify");
-import Promise from "yaku";
+import { Thenable } from "yaku";
 
 export interface RoutesListen {
-    (port: number): Promise<any>
+    (): Thenable<http.Server>;
+
+    (port: number, hostname?: string, backlog?: number): Thenable<http.Server>;
+    (port: number, hostname?: string): Thenable<http.Server>;
+    (path: string): Thenable<http.Server>;
+    (handle: any): Thenable<http.Server>;
 }
 
 export interface RoutesClose {
-    (): Promise<any>
+    (): Thenable<http.Server>;
 }
 
-export class Routes extends Array<_flow.Middleware> {
-    
-    constructor (server: http.Server) {
+export class Routes extends Array<Middleware> {
+
+    constructor () {
         super();
 
-        this.server = server;
-        
-        this.listen = promisify(server.listen, server);
-        this.close = promisify(server.close, server);
+        this.server = http.createServer(_flow(this));
+
+        this.listen = promisify(this.server.listen, this.server);
+        this.address = this.server.listen.bind(this.server);
+        this.close = promisify(this.server.close, this.server);
     }
-    
-    server: http.Server
-    
-    listen: RoutesListen
-    
-    close: RoutesClose
+
+    server: http.Server;
+
+    address: { port: number; family: string; address: string; };
+
+    listen: RoutesListen;
+
+    close: RoutesClose;
 
 }
 
+export type MiddlewareM = Middleware;
+export interface MiddlewareFunction extends MiddlewareFunction {};
+
 export interface Flow {
-    (): Routes
-    (...middlewares: _flow.Middleware[]): _flow.Middleware
+    (): Routes;
+    (...middlewares: Middleware[]): FlowHandler;
 }
 
 /**
@@ -49,12 +60,12 @@ export interface Flow {
  * app.listen(8123).then(() => console.log("started"));
  * ```
  */
-var flow: Flow = function () {
+let flow: Flow = function () {
     if (arguments.length > 0) {
-        return _flow.default.apply(0, arguments);
+        return _flow.apply(0, arguments);
     }
 
-    var routes = new Routes(http.createServer(_flow.default(routes)));
+    let routes = new Routes();
 
     return routes;
 };

@@ -10,12 +10,12 @@ export default testSuit("compose", ({
 
         let c = 0;
         app.push(
-            $ => $.next(c++),
+            $ => (c++, $.next()),
             flow(
-                $ => $.next(c++),
+                $ => (c++, $.next()),
                 flow(
-                    $ => $.next(c++),
-                    $ => $.next(c++)
+                    $ => (c++, $.next()),
+                    $ => (c++, $.next())
                 )
             ),
             $ => $.body = c
@@ -31,7 +31,7 @@ export default testSuit("compose", ({
             ({ next }) => next(),
             flow(
                 ({ next }) => next(),
-                ($) => $.body = "final"
+                $ => $.body = "final"
             )
         );
 
@@ -42,7 +42,7 @@ export default testSuit("compose", ({
         let app = flow();
 
         app.push(
-            ($) => {
+            $ => {
                 return $.next().catch((err) => {
                     $.body = `catch ${err}`;
                 });
@@ -69,13 +69,13 @@ export default testSuit("compose", ({
         });
 
         app.push(
-            ($) => {
+            $ => {
                 return p1.then((v) => {
                     c += v
                     return $.next();
                 });
             },
-            ($) =>{
+            $ => {
                 return p2.then((v) => {
                     c += v
                     return $.next();
@@ -104,18 +104,21 @@ export default testSuit("compose", ({
         });
 
         app.push(
-            ($) => {
+            $ => {
                 return p1.then((v) => {
                     c += v
                     return $.next();
                 });
             },
-            ($) =>{
+            $ => {
                 return p2.then((v) => {
                     c += v
                     return $.next();
                 });
             },
+            $ => {
+                $.body = c;
+            }
         );
 
         return eq(request(app)(), "p1p2");

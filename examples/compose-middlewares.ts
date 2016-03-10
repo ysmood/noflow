@@ -1,13 +1,13 @@
-import flow from "../src";
+import flow, { MiddlewareFunction } from "../src";
 import { parse } from "url";
-import kit from "nokit";
+let kit = require("nokit");
 let { select } = kit.require("proxy");
 
 let app = flow();
 
-let parseQuery = async $ => {
-    $.query = parse($.req.url, true).query;
-    await $.next();
+let parseQuery: MiddlewareFunction = $ => {
+    $["query"] = parse($.req.url, true).query;
+    return $.next();
 };
 
 // Only the selected url will waste CPU to parse the url.
@@ -16,7 +16,7 @@ app.push(
         "/item",
 
         // Here we use sub-route to compose two middlewares.
-        flow(parseQuery, $ => $.body = $.query.id)
+        flow(parseQuery, $ => $.body = $["query"].id)
     )
 );
 

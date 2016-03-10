@@ -40,19 +40,19 @@ export default testSuit("error", ({
         let app = flow();
 
         // circle object
-        var body = { next: null };
+        let body = { next: null };
         body.next = body;
         app.push($ => $.body = body);
 
-        let out = request(app)({ url: "/", body: false }).then(res => [res.statusCode]);
+        let out = request(app)({ url: "/", body: false }).then(res => res.statusCode);
 
-        return eq(out, [500]);
+        return eq(out, 500);
     });
 
-    it("status code 400 with missing middlewares", () => {
+    it("status code 404 with missing middlewares", () => {
         let app = flow();
-        let out = request(app)({ url: "/", body: false }).then(res => [res.statusCode]);
-        return eq([out.statusCode], [404]);
+        let out = request(app)({ url: "/", body: false }).then(res => res.statusCode);
+        return eq(out, 404);
     });
 
     // TODO: move to middlewares independently

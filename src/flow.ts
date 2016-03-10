@@ -1,4 +1,4 @@
-/// <reference path="./node.d.ts" />
+/// <reference path="../typings/node.d.ts" />
 
 "use strict";
 
@@ -9,55 +9,47 @@
 import { isFunction, isArray } from "./utils";
 import * as http from "http";
 import { Stream } from "stream";
-import Promise from "yaku";
+import Promise, { Thenable } from "yaku";
 
-var { STATUS_CODES } = http;
+let { STATUS_CODES } = http;
 
 
 export interface Context {
-    body: String | Buffer | Stream | Promise<any> | any
-    
-    req: http.IncomingMessage
-    
-    res: http.ServerResponse
-    
-    next: () => Promise<any>
+    /**
+     * It will be auto set as the response body.
+     */
+    body: String | Buffer | Stream | Thenable<any> | Object;
+
+    /**
+     * https://nodejs.org/api/http.html#http_http_incomingmessage
+     */
+    req: http.IncomingMessage;
+
+    /**
+     * https://nodejs.org/api/http.html#http_http_serverresponse
+     */
+    res: http.ServerResponse;
+
+    /**
+     * It returns a promise which settles after all the next middlewares are setttled.
+     */
+    next: () => Promise<any>;
+
 }
 
-export interface Middleware {
-    ($: Context): Promise<any> | any
+export interface MiddlewareFunction {
+    ($: Context): Thenable<any> | any;
 }
 
-export interface FlowHandler extends Middleware {
-    (req: http.IncomingMessage, res: http.ServerResponse): Promise<any>
+export type Middleware = MiddlewareFunction | Object;
+
+export interface FlowHandler extends MiddlewareFunction {
+    (req: http.IncomingMessage, res: http.ServerResponse): Promise<any>;
 }
 
 
 /**
  * A promise based function composer.
- * @param  {Array} middlewares If an non-array passed in, the whole arguments
- * of this function will be treated as the middleware array.
- * Each item is a function `($) => Promise | Any`,
- * or an object with the same type with `body`.
- * If the middleware has async operation inside, it should return a promise.
- * The members of `$`, FlowContext:
- * ```js
- * {
- *     // It can be a `String`, `Buffer`, `Stream`, `Object` or a `Promise` contains previous types.
- *     body: Any,
- *
- *     // https://nodejs.org/api/http.html#http_http_incomingmessage
- *     req: http.IncomingMessage,
- *
- *     // https://nodejs.org/api/http.html#http_http_incomingmessage
- *     res: http.IncomingMessage,
- *
- *     // It returns a promise which settles after all the next middlewares are setttled.
- *     next: () => Promise
- * }
- * ```
- * @return {Function} `(req, res) => Promise | Any` or `($) => Promise`.
- * The http request listener or middleware.
  * @example
  * Noflow encourages composition.
  * ```js
@@ -78,67 +70,69 @@ export interface FlowHandler extends Middleware {
  * app.listen(8123);
  * ```
  */
-var flow = function (middlewares: Array<Middleware>): FlowHandler { return function (req, res?) {
-    var $: Context, parentNext, next;
+let flow = function(middlewares: Array<Middleware>): FlowHandler {
+    return function(req, res?) {
+        let $: Context, parentNext, next;
 
-    // If it comes from a http listener, else it comes from a sub noflow.
-    if (res) {
-        $ = { req: req, res: res, next: null, body: null };
-    } else {
-        $ = req;
-        parentNext = $.next;
-
-        req = $.req;
-        res = $.res;
-    }
-
-    var index = 0;
-
-    // Wrap the next middleware.
-    next = $.next = function () {
-        var mid = middlewares[index++];
-        if (mid === undefined) {
-            // TODO: #4
-            if (parentNext) {
-                return parentNext();
-            } else {
-                return Promise.resolve(error404($));
-            }
-        }
-
-        var ret = tryMid(ensureMid(mid), $);
-
-        // Check if the fn has thrown error.
-        if (ret === tryMid) {
-            return Promise.reject(tryMidErr);
+        // If it comes from a http listener, else it comes from a sub noflow.
+        if (res) {
+            $ = { req: req, res: res, body: null, next: null };
         } else {
-            return Promise.resolve(ret);
+            $ = req;
+            parentNext = $.next;
+
+            req = $.req;
+            res = $.res;
         }
+
+        let index = 0;
+
+        // Wrap the next middleware.
+        next = $.next = function() {
+            let mid = middlewares[index++];
+            if (mid === undefined) {
+                // TODO: #4
+                if (parentNext) {
+                    return parentNext();
+                } else {
+                    return Promise.resolve(error404($));
+                }
+            }
+
+            let ret = tryMid(ensureMid(mid), $);
+
+            // Check if the fn has thrown error.
+            if (ret === tryMid) {
+                return Promise.reject(tryMidErr);
+            } else {
+                return Promise.resolve(ret);
+            }
+        };
+
+        // Begin the initial middleware.
+        let promise = next();
+
+        // The root middleware will finnally end the entire $ peacefully.
+        if (!parentNext) {
+            return promise
+                .then(function() { return endCtx($); })
+                .then(undefined, function(err) { return errorAndEndCtx(err, $); });
+        }
+
+        return promise;
     };
-
-    // Begin the initial middleware.
-    var promise = next();
-
-    // The root middleware will finnally end the entire $ peacefully.
-    if (!parentNext) {
-        return promise
-        .then(function () { return endCtx($); })
-        .catch(function (err) { return errorAndEndCtx(err, $); });
-    }
-
-    return promise;
-}; };
+};
 
 // Convert anything to a middleware function.
-function ensureMid (mid: Middleware) {
-    if (isFunction(mid)) return mid;
+function ensureMid(mid: Middleware) {
+    if (isFunction(mid)) return <MiddlewareFunction>mid;
 
-    return function ($: Context) { $.body = mid; };
+    return function($: Context) { $.body = mid; };
 }
 
 // for better performance, hack v8.
-var tryMidErr;
-function tryMid (fn: Middleware, $: Context): Promise<any> | typeof tryMid {
+let tryMidErr;
+function tryMid(fn: MiddlewareFunction, $: Context): Thenable<any> | typeof tryMid {
     try {
         return fn($);
     } catch (err) {
@@ -147,8 +141,8 @@ function tryMid (fn: Middleware, $: Context): Promise<any> | typeof tryMid {
     }
 }
 
-function endRes ($: Context, data, isStr?: boolean) {
-    var buf;
+function endRes($: Context, data, isStr?: boolean) {
+    let buf;
     if (isStr) {
         buf = new Buffer(data);
     } else {
@@ -162,55 +156,55 @@ function endRes ($: Context, data, isStr?: boolean) {
     $.res.end(buf);
 }
 
-function setStatusCode (res: http.ServerResponse, code: number) {
+function setStatusCode(res: http.ServerResponse, code: number) {
     if (res.statusCode === 200) res.statusCode = code;
 }
 
-function endEmpty (res: http.ServerResponse) {
+function endEmpty(res: http.ServerResponse) {
     setStatusCode(res, 204);
     res.end();
 }
 
-function endCtx ($: Context) {
-    var body = $.body;
-    var res = $.res;
+function endCtx($: Context) {
+    let body = $.body;
+    let res = $.res;
 
     switch (typeof body) {
-    case "string":
-        endRes($, body, true);
-        break;
+        case "string":
+            endRes($, body, true);
+            break;
 
-    case "object":
-        if (body == null) {
-            endEmpty(res);
-        } else if (body instanceof Stream) {
-            body.pipe(res);
-        } else if (body instanceof Buffer) {
-            endRes($, body);
-        } else if (isFunction(body.then)) {
-            return body.then(function (data) {
-                $.body = data;
-                return endCtx($);
-            });
-        } else {
-            if (!$.res.headersSent) {
-                res.setHeader("Content-Type", "application/json");
+        case "object":
+            if (body == null) {
+                endEmpty(res);
+            } else if (body instanceof Stream) {
+                body.pipe(res);
+            } else if (body instanceof Buffer) {
+                endRes($, body);
+            } else if (isFunction((<Thenable<any>>body).then)) {
+                return (<Thenable<any>>body).then(function(data) {
+                    $.body = data;
+                    return endCtx($);
+                });
+            } else {
+                if (!$.res.headersSent) {
+                    res.setHeader("Content-Type", "application/json");
+                }
+                endRes($, JSON.stringify(body), true);
             }
-            endRes($, JSON.stringify(body), true);
-        }
-        break;
+            break;
 
-    case "undefined":
-        endEmpty(res);
-        break;
+        case "undefined":
+            endEmpty(res);
+            break;
 
-    default:
-        endRes($, body.toString(), true);
-        break;
+        default:
+            endRes($, body.toString(), true);
+            break;
     }
 }
 
-function errorAndEndCtx (err: Error | any, $: Context) {
+function errorAndEndCtx(err: Error | any, $: Context) {
     setStatusCode($.res, 500);
 
     if (process.env.NODE_ENV === "production") {
@@ -227,16 +221,16 @@ function errorAndEndCtx (err: Error | any, $: Context) {
     return endCtx($);
 }
 
-function error404 ($: Context) {
+function error404($: Context) {
     setStatusCode($.res, 404);
     $.body = STATUS_CODES[$.res.statusCode];
 }
 
-export default function (middlewares: Array<Middleware>) {    
+export default function(middlewares: Array<Middleware>) {
     // Make sure we pass in an array
     if (!isArray(middlewares)) {
         middlewares = [].slice.call(arguments);
     }
-    
+
     return flow(middlewares);
 };

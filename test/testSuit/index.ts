@@ -1,9 +1,12 @@
-import flow from "../../src";
+import flow, { Routes } from "../../src";
 
-var kit = require("nokit");
+let kit = require("nokit");
 let { _ } = kit;
 global.Promise = kit.Promise;
 
+interface Fn {
+    (arg: { flow: typeof flow, kit: any, eq: any, it: any, request }): any
+}
 
 /**
  * It will let a noflow app instrance listen to a random port, then
@@ -11,7 +14,7 @@ global.Promise = kit.Promise;
  * object.
  * `(app) => (url | { url, method, headers, reqData }) => Promise`
  */
-let request = (app) => (opts) =>
+let request = (app: Routes) => (opts) =>
     app.listen().then(() => {
         let host = `http://127.0.0.1:${app.server.address().port}`;
         if (_.isString(opts))
@@ -28,7 +31,7 @@ let request = (app) => (opts) =>
         });
     });
 
-export default (title, fn) =>
+export default (title, fn: Fn) =>
     (it) =>
         it.describe(title, (it) =>
             fn({

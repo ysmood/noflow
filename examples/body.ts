@@ -1,5 +1,5 @@
 import flow from "../src";
-import kit from "nokit";
+let kit = require("nokit");
 
 let app = flow();
 
