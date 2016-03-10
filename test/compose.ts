@@ -1,10 +1,11 @@
 import testSuit from "./testSuit";
+import Promise from "yaku";
 
 export default testSuit("compose", ({
     it, request, eq, flow
 }) => {
 
-    it("basic", async () => {
+    it("basic", () => {
         let app = flow();
 
         let c = 0;
@@ -20,10 +21,10 @@ export default testSuit("compose", ({
             $ => $.body = c
         );
 
-        return eq(await request(app)(), "4");
+        return eq(request(app)(), "4");
     });
 
-    it("arguments", async () => {
+    it("arguments", () => {
         let app = flow();
 
         app.push(
@@ -34,29 +35,27 @@ export default testSuit("compose", ({
             )
         );
 
-        return eq(await request(app)(), "final");
+        return eq(request(app)(), "final");
     });
 
-    it("parent catch composed error", async () => {
+    it("parent catch composed error", () => {
         let app = flow();
 
         app.push(
-            async ($) => {
-                try {
-                    await $.next();
-                } catch (err) {
+            ($) => {
+                return $.next().catch((err) => {
                     $.body = `catch ${err}`;
-                }
+                });
             },
             flow([
                 () => { throw "err"; }
             ])
         );
 
-        return eq(await request(app)(), "catch err");
+        return eq(request(app)(), "catch err");
     });
 
-    it("order by decreasing time", async () => {
+    it("order by decreasing time", () => {
         let app = flow();
 
         let c = "";
@@ -70,24 +69,28 @@ export default testSuit("compose", ({
         });
 
         app.push(
-            async ($) => {
-                c += await p1;
-                await $.next();
+            ($) => {
+                return p1.then((v) => {
+                    c += v
+                    return $.next();
+                });
             },
-            async ($) =>{
-                c += await p2;
-                await $.next();
+            ($) =>{
+                return p2.then((v) => {
+                    c += v
+                    return $.next();
+                });
             },
             $ => {
                 $.body = c;
             }
         );
 
-        return eq(await request(app)(), "p1p2");
+        return eq(request(app)(), "p1p2");
 
     });
 
-    it("order by increasing time", async () => {
+    it("order by increasing time", () => {
         let app = flow();
 
         let c = "";
@@ -101,20 +104,21 @@ export default testSuit("compose", ({
         });
 
         app.push(
-            async ($) => {
-                c += await p1;
-                await $.next();
+            ($) => {
+                return p1.then((v) => {
+                    c += v
+                    return $.next();
+                });
             },
-            async ($) => {
-                c += await p2;
-                await $.next();
+            ($) =>{
+                return p2.then((v) => {
+                    c += v
+                    return $.next();
+                });
             },
-            $ => {
-                $.body = c;
-            }
         );
 
-        return eq(await request(app)(), "p1p2");
+        return eq(request(app)(), "p1p2");
 
     });
 

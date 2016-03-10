@@ -7,15 +7,15 @@ import * as http from "http";
 import promisify = require("yaku/lib/promisify");
 import Promise from "yaku";
 
-interface RoutesListen {
+export interface RoutesListen {
     (port: number): Promise<any>
 }
 
-interface RoutesClose {
+export interface RoutesClose {
     (): Promise<any>
 }
 
-class Routes extends Array<_flow.Middleware> {
+export class Routes extends Array<_flow.Middleware> {
     
     constructor (server: http.Server) {
         super();
@@ -34,7 +34,7 @@ class Routes extends Array<_flow.Middleware> {
 
 }
 
-interface Flow {
+export interface Flow {
     (): Routes
     (...middlewares: _flow.Middleware[]): _flow.Middleware
 }
@@ -59,5 +59,4 @@ var flow: Flow = function () {
     return routes;
 };
 
-module.exports = flow;
 export default flow;

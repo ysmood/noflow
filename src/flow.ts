@@ -106,8 +106,7 @@ var flow = function (middlewares: Array<Middleware>): FlowHandler { return funct
             }
         }
 
-        var fn = ensureMid(mid);
-        var ret = tryMid(fn, $);
+        var ret = tryMid(ensureMid(mid), $);
 
         // Check if the fn has thrown error.
         if (ret === tryMid) {
@@ -139,7 +138,7 @@ function ensureMid (mid: Middleware) {
 
 // for better performance, hack v8.
 var tryMidErr;
-function tryMid (fn: Middleware, $: Context) {
+function tryMid (fn: Middleware, $: Context): Promise<any> | typeof tryMid {
     try {
         return fn($);
     } catch (err) {
@@ -233,11 +232,11 @@ function error404 ($: Context) {
     $.body = STATUS_CODES[$.res.statusCode];
 }
 
-export default function (middlewares: Array<Middleware>) {
+export default function (middlewares: Array<Middleware>) {    
     // Make sure we pass in an array
     if (!isArray(middlewares)) {
         middlewares = [].slice.call(arguments);
     }
-
+    
     return flow(middlewares);
 };

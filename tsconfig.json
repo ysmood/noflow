@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "outDir": "lib"
+        "outDir": "lib",
+        "declaration": true
     },
     "files": [
         "src/index.ts"

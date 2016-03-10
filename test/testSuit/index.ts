@@ -1,7 +1,9 @@
-import kit from "nokit";
 import flow from "../../src";
+
+var kit = require("nokit");
 let { _ } = kit;
 global.Promise = kit.Promise;
+
 
 /**
  * It will let a noflow app instrance listen to a random port, then
@@ -9,23 +11,22 @@ global.Promise = kit.Promise;
  * object.
  * `(app) => (url | { url, method, headers, reqData }) => Promise`
  */
-let request = (app) => async (opts) => {
-    await app.listen();
+let request = (app) => (opts) =>
+    app.listen().then(() => {
+        let host = `http://127.0.0.1:${app.server.address().port}`;
+        if (_.isString(opts))
+            opts = `${host}${opts}`;
+        else if (_.isUndefined(opts))
+            opts = host + "/";
+        else
+            opts.url = `${host}${opts.url}`;
 
-    let host = `http://127.0.0.1:${app.server.address().port}`;
-    if (_.isString(opts))
-        opts = `${host}${opts}`;
-    else if (_.isUndefined(opts))
-        opts = host + "/";
-    else
-        opts.url = `${host}${opts.url}`;
-
-    let res = await kit.request(opts);
-
-    await app.close();
-
-    return res;
-};
+        return kit.request(opts).then((res) => {
+            return app.close().then(() => {
+                return res;
+            });
+        });
+    });
 
 export default (title, fn) =>
     (it) =>

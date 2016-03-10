@@ -1,8 +1,10 @@
+/// <reference path="./src/node.d.ts" />
+
 "use strict";
 
-import kit from "nokit";
+let kit = require("nokit");
 
-export default (task, option) => {
+module.exports = (task, option) => {
 
     option("-n, --name <examples/basic>", "example file name", "examples/basic");
     option("-g, --grep <.*>", "unit test regex filter", ".*");
@@ -61,12 +63,15 @@ export default (task, option) => {
         console.log(`Node ${process.version}`);
         console.log(`The less the better:`);
         return kit.flow(paths.reverse().map((path) => {
-            return async () => {
+            return () => {
                 var p = port++;
                 var name = kit.path.basename(path, ".js");
                 var child = kit.spawn("node", [path, p]).process;
-                await kit.spawn("node", ["benchmark/index.js", p, name]);
-                child.kill();
+
+                return kit.spawn("node", ["benchmark/index.js", p, name])
+                .then(() => {
+                    child.kill();
+                });
             };
         }))();
     });

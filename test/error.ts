@@ -1,29 +1,28 @@
 import testSuit from "./testSuit";
+import Promise from "yaku";
 
 export default testSuit("error", ({
     it, request, eq, flow
 }) => {
 
-    it("basic", async () => {
+    it("basic", () => {
         let app = flow();
 
         app.push(
-            async $ => {
-                try {
-                    await $.next();
-                } catch (err) {
+            $ => {
+                return $.next().catch((err) => {
                     $.body = "catch:" + err;
-                }
+                });
             },
             () => {
                 throw "error";
             }
         );
 
-        return eq(await request(app)(), "catch:error");
+        return eq(request(app)(), "catch:error");
     });
 
-    it("status code 500 with error message", async () => {
+    it("status code 500 with error message", () => {
         let app = flow();
 
         app.push(
@@ -32,35 +31,35 @@ export default testSuit("error", ({
             }
         );
 
-        let res = await request(app)({ url: "/", body: false });
+        let out = request(app)({ url: "/", body: false }).then(res => [res.statusCode, res.body]);
 
-        return eq([res.statusCode, res.body], [500, "error"]);
+        return eq(out, [500, "error"]);
     });
 
-    it("status code 500 with circle body object", async () => {
+    it("status code 500 with circle body object", () => {
         let app = flow();
 
         // circle object
-        var body = {};
+        var body = { next: null };
         body.next = body;
         app.push($ => $.body = body);
 
-        let res = await request(app)({ url: "/", body: false });
+        let out = request(app)({ url: "/", body: false }).then(res => [res.statusCode]);
 
-        return eq([res.statusCode], [500]);
+        return eq(out, [500]);
     });
 
-    it("status code 400 with missing middlewares", async () => {
+    it("status code 400 with missing middlewares", () => {
         let app = flow();
-        let res = await request(app)({ url: "/", body: false });
-        return eq([res.statusCode], [404]);
+        let out = request(app)({ url: "/", body: false }).then(res => [res.statusCode]);
+        return eq([out.statusCode], [404]);
     });
 
     // TODO: move to middlewares independently
-    it("timeout", async () => {
+    it("timeout", () => {
         let app = flow();
 
-        app.push(async ($) => {
+        app.push(($) => {
             let p1 = new Promise((resolve, reject) => {
                 setTimeout( () => {
                     $.body = "time out";
@@ -76,8 +75,6 @@ export default testSuit("error", ({
             setTimeout(r, 200);
         }));
 
-        let body = await request(app)();
-
-        return eq(body, "time out");
+        return eq(request(app)(), "time out");
     });
 });
