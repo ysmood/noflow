@@ -75,7 +75,7 @@ export interface FlowHandler extends MiddlewareFn {
  * app.listen(8123);
  * ```
  */
-let flow = function(middlewares: Array<Middleware>): FlowHandler {
+let flow = function(middlewares: Middleware[]): FlowHandler {
     return function(req, res?) {
         let $: Context, parentNext, next;
 
@@ -231,7 +231,7 @@ function error404($: Context) {
     $.body = STATUS_CODES[$.res.statusCode];
 }
 
-export default function(middlewares: Array<Middleware>) {
+export default function(middlewares: Middleware[]) {
     // Make sure we pass in an array
     if (!isArray(middlewares)) {
         middlewares = [].slice.call(arguments);
