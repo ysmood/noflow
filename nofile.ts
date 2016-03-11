@@ -49,6 +49,7 @@ module.exports = (task, option) => {
     task("test", ["lint"], "run test once", (opts) =>
         kit.spawn("junit", [
             "-r", "ts-node/register",
+            "-t", 20000,
             "-g", opts.grep,
             "test/*.ts"
         ])
