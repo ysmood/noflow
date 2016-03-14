@@ -21,12 +21,17 @@ export interface Context {
     body: String | Buffer | Stream | Thenable<any> | Object;
 
     /**
+     * An IncomingMessage object is created by http.Server or http.
+     * ClientRequest and passed as the first argument to the 'request' and 'response' event respectively.
+     * It may be used to access response status, headers and data.
      * https://nodejs.org/api/http.html#http_http_incomingmessage
      */
     req: http.IncomingMessage;
 
     /**
-     * https://nodejs.org/api/http.html#http_http_serverresponse
+     * This object is created internally by a HTTP server--not by the user. It is passed as the second parameter to the 'request' event.
+     * The response implements the Writable Stream interface.
+     * https://nodejs.org/api/http.html#http_class_http_serverresponse
      */
     res: http.ServerResponse;
 
