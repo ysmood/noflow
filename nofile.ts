@@ -1,4 +1,5 @@
 /// <reference path="typings/node.d.ts" />
+// nofile-pre-require: ts-node/register
 
 "use strict";
 
