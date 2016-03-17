@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "A minimal server middleware composer for the future.",
   "main": "lib/index.js",
   "scripts": {
@@ -36,12 +36,12 @@
   },
   "homepage": "https://github.com/ysmood/noflow",
   "dependencies": {
-    "yaku": "0.13.5"
+    "yaku": "0.13.7"
   },
   "devDependencies": {
     "body-parser": "1.15.0",
     "express": "4.13.4",
-    "junit": "1.2.0",
+    "junit": "1.2.1",
     "koa": "1.2.0",
     "nokit": "0.19.0",
     "path-to-regexp": "1.2.1",
