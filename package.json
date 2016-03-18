@@ -41,9 +41,9 @@
   "devDependencies": {
     "body-parser": "1.15.0",
     "express": "4.13.4",
-    "junit": "1.2.1",
+    "junit": "1.2.2",
     "koa": "1.2.0",
-    "nokit": "0.19.0",
+    "nokit": "0.19.1",
     "path-to-regexp": "1.2.1",
     "send": "0.13.2",
     "ts-node": "0.6.2",
