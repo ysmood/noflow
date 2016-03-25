@@ -18,7 +18,7 @@ module.exports = (task, option) => {
         });
     });
 
-    task("build", [], "build", () => {
+    task("build", ["lint", "build-ts"], "build", () => {
         return kit.warp("src/*.ts")
         .load(
             kit.drives.comment2md({ h: 2, tpl: "doc/readme.jst.md" })
