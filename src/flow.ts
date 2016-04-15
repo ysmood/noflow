@@ -192,8 +192,8 @@ function endCtx($: Context) {
                     return endCtx($);
                 });
             } else {
-                if (!$.res.headersSent) {
-                    res.setHeader("Content-Type", "application/json");
+                if (!$.res.headersSent && !res.getHeader("content-type")) {
+                    res.setHeader("Content-Type", "application/json; charset=utf-8");
                 }
                 endRes($, JSON.stringify(body), true);
             }
