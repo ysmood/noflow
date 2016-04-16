@@ -75,7 +75,7 @@ module.exports = testSuit("basic", ({
         });
 
         return request(app)({url: "/", body: false}).then((resp) => {
-            return eq(resp.headers["content-type"], "application/json");
+            return eq(resp.headers["content-type"], "application/json; charset=utf-8");
         });
     });
 
