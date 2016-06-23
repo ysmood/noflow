@@ -12,7 +12,9 @@ let opts = {
     cert: readFileSync("test/testSuit/server.crt")
 };
 
-let handler = flow("hello world");
+let routes = ["hello world"];
+
+let handler = flow(routes);
 
 // We here use the same handler for http and https on different port.
 http.createServer(handler).listen(8123);
