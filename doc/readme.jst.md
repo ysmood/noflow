@@ -162,7 +162,7 @@ app.listen(8123);
 
 # API
 
-If you use typescript, you don't have to read the API below.
+It's recommended to use typescript to check all the API details.
 
 <%= doc['src/index.ts'] %>
 

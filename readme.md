@@ -162,11 +162,20 @@ app.listen(8123);
 
 # API
 
-If you use typescript, you don't have to read the API below.
+It's recommended to use typescript to check all the API details.
 
-- ## **[flow](src/index.ts?source#L62)**
+- ## **[flow()](src/index.ts?source#L65)**
 
     Create an array instance with some handy server helper methods.
+
+    - **<u>param</u>**:
+
+        FlowArray middlewares Optional. If not provided, the return type will be
+        a FlowArray, else a middleware Function.
+
+    - **<u>return</u>**:
+
+        FlowArray | Function
 
     - **<u>example</u>**:
 

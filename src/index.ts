@@ -51,6 +51,9 @@ export interface Flow {
 
 /**
  * Create an array instance with some handy server helper methods.
+ * @param FlowArray middlewares Optional. If not provided, the return type will be
+ * a FlowArray, else a middleware Function.
+ * @return FlowArray | Function
  * @example
  * ```js
  * import flow from "noflow"
