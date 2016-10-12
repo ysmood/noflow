@@ -79,6 +79,32 @@ module.exports = testSuit("basic", ({
         });
     });
 
+    it("should response with application/octet-stream content type", () => {
+        let app = flow();
+        let obj = new Buffer([1, 2, 3]);
+
+        app.push($ => {
+            $.body = obj;
+        });
+
+        return request(app)({url: "/", body: false}).then((resp) => {
+            return eq(resp.headers["content-type"], "application/octet-stream");
+        });
+    });
+
+    it("should response with text/html content type", () => {
+        let app = flow();
+        let obj = "test";
+
+        app.push($ => {
+            $.body = obj;
+        });
+
+        return request(app)({url: "/", body: false}).then((resp) => {
+            return eq(resp.headers["content-type"], "text/html; charset=utf-8");
+        });
+    });
+
     it("should response with given content length", () => {
         const FIX = 5;
 

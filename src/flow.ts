@@ -176,6 +176,7 @@ function endCtx($: Context) {
 
     switch (typeof body) {
         case "string":
+            setContentType(res, "text/html; charset=utf-8");
             endRes($, body, true);
             break;
 
@@ -183,8 +184,10 @@ function endCtx($: Context) {
             if (body == null) {
                 endEmpty(res);
             } else if (body instanceof Stream) {
+                setContentType(res, "application/octet-stream");
                 body.pipe(res);
             } else if (body instanceof Buffer) {
+                setContentType(res, "application/octet-stream");
                 endRes($, body);
             } else if (isFunction((<Thenable<any>>body).then)) {
                 return (<Thenable<any>>body).then(function(data) {
@@ -192,9 +195,7 @@ function endCtx($: Context) {
                     return endCtx($);
                 });
             } else {
-                if (!$.res.headersSent && !res.getHeader("content-type")) {
-                    res.setHeader("Content-Type", "application/json; charset=utf-8");
-                }
+                setContentType(res, "application/json; charset=utf-8");
                 endRes($, JSON.stringify(body), true);
             }
             break;
@@ -206,6 +207,12 @@ function endCtx($: Context) {
         default:
             endRes($, body.toString(), true);
             break;
+    }
+}
+
+function setContentType(res: http.ServerResponse, type: string) {
+    if (!res.headersSent && !res.getHeader("content-type")) {
+        res.setHeader("Content-Type", type);
     }
 }
 
