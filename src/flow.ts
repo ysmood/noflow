@@ -75,8 +75,8 @@ export interface FlowHandler extends MiddlewareFn {
  * app.listen(8123);
  * ```
  */
-let flow = function(middlewares: Middleware[]): FlowHandler {
-    return function(req, res?) {
+let flow = function (middlewares: Middleware[]): FlowHandler {
+    return function (req, res?) {
         let $: Context, parentNext, next;
 
         // If it comes from a http listener, else it comes from a sub noflow.
@@ -93,7 +93,7 @@ let flow = function(middlewares: Middleware[]): FlowHandler {
         let index = 0;
 
         // Wrap the next middleware.
-        next = $.next = function() {
+        next = $.next = function () {
             let mid = middlewares[index++];
             if (mid === undefined) {
                 // TODO: #4
@@ -120,8 +120,8 @@ let flow = function(middlewares: Middleware[]): FlowHandler {
         // The root middleware will finnally end the entire $ peacefully.
         if (!parentNext) {
             return promise
-                .then(function() { return endCtx($); })
-                .then(undefined, function(err) { return errorAndEndCtx(err, $); });
+                .then(function () { return endCtx($); })
+                .then(undefined, function (err) { return errorAndEndCtx(err, $); });
         }
 
         return promise;
@@ -132,7 +132,7 @@ let flow = function(middlewares: Middleware[]): FlowHandler {
 function ensureMid(mid: Middleware) {
     if (isFunction(mid)) return <MiddlewareFn>mid;
 
-    return function($: Context) { $.body = mid; };
+    return function ($: Context) { $.body = mid; };
 }
 
 // for better performance, hack v8.
@@ -146,10 +146,11 @@ function tryMid(fn: MiddlewareFn, $: Context): Thenable<any> | typeof tryMid {
     }
 }
 
-function endRes($: Context, data, isStr?: boolean) {
+function endRes($: Context, data: string | Buffer, isStr?: boolean) {
     let buf;
+
     if (isStr) {
-        buf = new Buffer(data);
+        buf = new Buffer(<string>data);
     } else {
         buf = data;
     }
@@ -176,24 +177,34 @@ function endCtx($: Context) {
 
     switch (typeof body) {
         case "string":
+            // String
             setContentType(res, "text/html; charset=utf-8");
-            endRes($, body, true);
+            endRes($, <string>body, true);
             break;
 
         case "object":
+            // Null
             if (body == null) {
                 endEmpty(res);
+
+            // Stream
             } else if (body instanceof Stream) {
                 setContentType(res, "application/octet-stream");
                 body.pipe(res);
+
+            // Buffer
             } else if (body instanceof Buffer) {
                 setContentType(res, "application/octet-stream");
                 endRes($, body);
+
+            // Promise
             } else if (isFunction((<Thenable<any>>body).then)) {
-                return (<Thenable<any>>body).then(function(data) {
+                return (<Thenable<any>>body).then(function (data) {
                     $.body = data;
                     return endCtx($);
                 });
+
+            // Raw Object
             } else {
                 setContentType(res, "application/json; charset=utf-8");
                 endRes($, JSON.stringify(body), true);
@@ -201,11 +212,14 @@ function endCtx($: Context) {
             break;
 
         case "undefined":
+            // Undefined
             endEmpty(res);
             break;
 
         default:
-            endRes($, body.toString(), true);
+            // Other situations, such as Number
+            setContentType(res, "text/plain");
+            endRes($, body + "", true);
             break;
     }
 }
@@ -238,7 +252,7 @@ function error404($: Context) {
     $.body = STATUS_CODES[$.res.statusCode];
 }
 
-export default function(middlewares: Middleware[]) {
+export default function (middlewares: Middleware[]) {
     // Make sure we pass in an array
     if (!isArray(middlewares)) {
         middlewares = [].slice.call(arguments);
