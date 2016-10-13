@@ -8,6 +8,8 @@ functions, they can be easily composed with each other.
 
 To use noflow, you only have to remember a single rule "Any async function should and will return a Promise".
 
+
+
 # Features
 
 - Super lightweight, only one dependency, 200 sloc, learn it in 5 minutes
@@ -25,9 +27,13 @@ Such as, to run the [examples/basic.js](examples/basic.js), use command like:
 
 [![NPM version](https://badge.fury.io/js/noflow.svg)](http://badge.fury.io/js/noflow) [![Build Status](https://travis-ci.org/ysmood/noflow.svg)](https://travis-ci.org/ysmood/noflow) [![Build status](https://ci.appveyor.com/api/projects/status/github/ysmood/noflow?svg=true)](https://ci.appveyor.com/project/ysmood/noflow) [![Deps Up to Date](https://david-dm.org/ysmood/noflow.svg?style=flat)](https://david-dm.org/ysmood/noflow)
 
+
+
 # Quick Start
 
 Install it: `npm i noflow`.
+
+
 
 ### Hello World Example
 
@@ -36,16 +42,19 @@ import flow from "noflow";
 
 let app = flow();
 
-// Everything pushed into the app will be converted to a
-// middleware object sanely, even it's a string, buffer or anything else.
+// Anything pushed into the app will be converted to a
+// middleware object sanely, even it's a string, buffer, stream or anything else.
+// Here we created a server that responses only string "hello world".
 app.push("hello world");
 
 app.listen(8123);
 ```
 
+
+
 ### ES5
 
-Without ES7, you can still have all the good stuffs of Noflow.
+Without ES7, you can still have all the goodies.
 
 ```javascript
 var flow = require("noflow").default;
@@ -64,6 +73,8 @@ app.push(function ($) {
 
 app.listen(8123);
 ```
+
+
 
 ### ES7
 
@@ -87,6 +98,8 @@ app.push(
 
 app.listen(8123);
 ```
+
+
 
 ### Routes
 
@@ -130,6 +143,8 @@ app.push(
 app.listen(8123);
 ```
 
+
+
 ### Express middleware
 
 It's easy to convert an express middleware to noflow middleware.
@@ -159,6 +174,8 @@ app.push(
 
 app.listen(8123);
 ```
+
+
 
 # API
 
