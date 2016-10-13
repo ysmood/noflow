@@ -64,6 +64,32 @@ module.exports = testSuit("basic", ({
         });
     });
 
+    it("should response with text/plain content type", () => {
+        let app = flow();
+        let obj = 10;
+
+        app.push($ => {
+            $.body = obj;
+        });
+
+        return request(app)({url: "/", body: false}).then((resp) => {
+            return eq(resp.headers["content-type"], "text/plain");
+        });
+    });
+
+    it("should response with application/json content type", () => {
+        let app = flow();
+        let obj = [1, 2, 3];
+
+        app.push($ => {
+            $.body = obj;
+        });
+
+        return request(app)({url: "/", body: false}).then((resp) => {
+            return eq(resp.headers["content-type"], "application/json; charset=utf-8");
+        });
+    });
+
     it("should response with application/json content type", () => {
         let app = flow();
         let obj = {
@@ -129,6 +155,16 @@ module.exports = testSuit("basic", ({
         });
     });
 
+    it("should echo the promise by given handler", () => {
+        let app = flow();
+
+        app.push($ => {
+            $.body = kit.readFile("package.json");
+        });
+
+        return eq(request(app)({url: "/", resEncoding: null }), kit.readFile("package.json"));
+    });
+
     it("should echo the stream by given handler", () => {
         let app = flow();
 
@@ -149,6 +185,13 @@ module.exports = testSuit("basic", ({
     it("should response `undefined` with status code 204", () => {
         let app = flow();
         app.push($ => $.body = undefined);
+
+        return eq(request(app)({url: "/", body: false}).then(e => e.statusCode), 204);
+    });
+
+    it("should response `null` with status code 204", () => {
+        let app = flow();
+        app.push($ => $.body = null);
 
         return eq(request(app)({url: "/", body: false}).then(e => e.statusCode), 204);
     });
