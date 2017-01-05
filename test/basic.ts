@@ -1,3 +1,5 @@
+/// <reference path="../node_modules/@types/node/index.d.ts" />
+
 import Promise from "yaku";
 import testSuit from "./testSuit";
 import * as https from "https";
