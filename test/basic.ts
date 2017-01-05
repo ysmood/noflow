@@ -1,5 +1,3 @@
-/// <reference path="../typings/node.d.ts" />
-
 import Promise from "yaku";
 import testSuit from "./testSuit";
 import * as https from "https";
