@@ -1,6 +1,6 @@
-import flow from "../src";
-let bodyParser = require("body-parser");
-let kit = require("nokit");
+import flow from "../lib";
+import * as bodyParser from "body-parser";
+import * as kit from "nokit";
 let { midToFlow } = kit.require("proxy");
 
 let app = flow();

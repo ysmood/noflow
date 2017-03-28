@@ -181,7 +181,7 @@ app.listen(8123);
 
 It's recommended to use typescript to check all the API details.
 
-<%= doc['src/index.ts'] %>
+<%= doc['lib/index.ts'] %>
 
 
 # Status code

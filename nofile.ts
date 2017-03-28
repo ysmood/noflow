@@ -1,33 +1,34 @@
-/// <reference path="node_modules/@types/node/index.d.ts" />
+import * as kit from "nokit"
 
-let kit = require("nokit");
-
-module.exports = (task, option) => {
+export = (task, option) => {
 
     option("-n, --name <examples/basic>", "example file name", "examples/basic");
     option("-g, --grep <.*>", "unit test regex filter", ".*");
 
-    task("default", "run an example", (opts) => {
+    task("default", "run an example", kit.async(function * (opts) {
+        yield kit.spawn('tsc')
+
+        kit.spawn('tsc', ['-w'])
+
+        if (!opts.name) return
+
         kit.monitorApp({
-            bin: "ts-node",
+            bin: "node",
             args: [opts.name],
-            watchList: ["examples/**/*.ts", "src/**/*.ts"]
+            isNodeDeps: false,
+            watchList: ["examples/**/*.js", "src/**/*.js"]
         });
-    });
+    }));
 
     task("build", ["lint", "build-ts"], "build", () => {
-        return kit.warp("src/*.ts")
+        return kit.warp("lib/*.ts")
         .load(
             kit.drives.comment2md({ h: 2, tpl: "doc/readme.jst.md" })
         ).run();
     });
 
-    task("build-ts", ["clean"], "build src to lib", () => {
+    task("build-ts", "build src to lib", () => {
         return kit.spawn("tsc");
-    });
-
-    task("clean", "clean", () => {
-        return kit.remove("lib");
     });
 
     task("watch-test", "run & watch test api", (opts) =>
@@ -39,17 +40,16 @@ module.exports = (task, option) => {
     );
 
     task("lint", "lint all code of this project", () => {
-        return kit.glob("{examples,src,test}/**/*.ts").then((paths) => {
+        return kit.glob("{examples,lib,test}/**/*.ts").then((paths) => {
             return kit.spawn("tslint", ["-c", "tslint.json", ...paths])
         });
     });
 
     task("test", ["lint"], "run test once", (opts) =>
         kit.spawn("junit", [
-            "-r", "ts-node/register",
             "-t", 20000,
             "-g", opts.grep,
-            "test/*.ts"
+            "test/*.js"
         ])
     );
 

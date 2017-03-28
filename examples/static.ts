@@ -1,5 +1,5 @@
-import flow from "../src";
-let kit = require("nokit");
+import flow from "../lib";
+import * as kit from "nokit";
 let { select, static: st } = kit.require("proxy");
 
 let app = flow();

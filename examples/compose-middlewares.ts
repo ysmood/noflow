@@ -1,6 +1,6 @@
-import flow, { MiddlewareFn } from "../src";
+import flow, { MiddlewareFn } from "../lib";
 import { parse } from "url";
-let kit = require("nokit");
+import * as kit from "nokit";
 let { select } = kit.require("proxy");
 
 let app = flow();

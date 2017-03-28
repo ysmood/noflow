@@ -1,7 +1,7 @@
 // Work like nginx virtual host.
 
 let kit = require("nokit");
-import flow from "../src";
+import flow from "../lib";
 let { select, static: st } = kit.require("proxy");
 let app = flow();
 

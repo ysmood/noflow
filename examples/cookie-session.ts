@@ -1,6 +1,6 @@
-import flow from "../src";
-let cookieSession = require("cookie-session");
-let kit = require("nokit");
+import flow from "../lib";
+import * as cookieSession from "cookie-session";
+import * as kit from "nokit";
 let { midToFlow } = kit.require("proxy");
 
 let app = flow();

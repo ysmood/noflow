@@ -1,10 +1,10 @@
-import flow, { Routes } from "../../src";
+import flow, { Routes } from "../../lib";
 
 let kit = require("nokit");
 let { _ } = kit;
 global.Promise = kit.Promise;
 
-interface Fn {
+export interface Fn {
     (arg: { flow: typeof flow, kit: any, eq: any, it: any, request }): any
 }
 

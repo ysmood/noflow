@@ -181,7 +181,7 @@ app.listen(8123);
 
 It's recommended to use typescript to check all the API details.
 
-- ## **[flow()](src/index.ts?source#L65)**
+- ## **[flow()](lib/index.ts?source#L63)**
 
     Create an array instance with some handy server helper methods.
 

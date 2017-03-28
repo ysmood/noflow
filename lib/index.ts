@@ -1,5 +1,3 @@
-/// <reference path="../typings/promisify.d.ts" />
-
 "use strict";
 
 import _flow, { Middleware, MiddlewareFn, FlowHandler } from "./flow";

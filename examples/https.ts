@@ -2,9 +2,9 @@
     This demos how to serve http and https at the same time.
  */
 
-import flow from "../src";
-let http = require("http");
-let https = require("https");
+import flow from "../lib";
+import * as http from "http";
+import * as https from "https";
 import { readFileSync } from "fs";
 
 let opts = {

@@ -1,6 +1,7 @@
 node_modules
-lib
 .nokit
 .nobone
 *sublime-*
 *.log
+*.js
+*.d.ts
