@@ -1,6 +1,6 @@
 {
   "name": "noflow",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "description": "A minimal server middleware composer for the future.",
   "main": "lib/index.js",
   "scripts": {
