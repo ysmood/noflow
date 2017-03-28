@@ -4,7 +4,9 @@
         "**/.git": true,
         "**/.DS_Store": true,
         "**/*.db": true,
-        "**/*.js": true,
+         "**/*.js": {
+            "when": "$(basename).ts"
+        },
         "**/*.d.ts": true
     },
     "typescript.tsdk": "./node_modules/typescript/lib",

@@ -8,7 +8,7 @@ module.exports = (task, option) => {
     task("default", "run an example", kit.async(function * (opts) {
         yield kit.spawn('tsc')
 
-        kit.spawn('tsc', ['-w'])
+        kit.spawn('tsc', ['-w', '-p', 'tsconfig-dev.json'])
 
         if (!opts.name) return
 
