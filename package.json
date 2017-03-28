@@ -1,24 +1,23 @@
 {
   "name": "noflow",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "A minimal server middleware composer for the future.",
   "main": "lib/index.js",
   "scripts": {
     "no": "no",
     "test": "no test",
-    "prepublish": "no build"
+    "prepublish": "no build",
+    "postinstall": "tsc"
   },
   "nofile": {
-    "preRequire": "ts-node/register"
+    "autoInstallDeps": true
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ysmood/noflow"
   },
   "files": [
-    "lib",
-    "src",
-    "typings"
+    "lib/*.{js,d.ts}"
   ],
   "keywords": [
     "api",
@@ -39,20 +38,19 @@
   },
   "homepage": "https://github.com/ysmood/noflow",
   "dependencies": {
-    "yaku": "0.17.7"
+    "yaku": "0.17.9"
   },
   "devDependencies": {
-    "@types/node": "6.0.57",
-    "body-parser": "1.15.2",
-    "express": "4.14.0",
-    "junit": "1.4.7",
-    "koa": "1.2.4",
-    "nokit": "0.23.15",
+    "@types/node": "7.0.12",
+    "body-parser": "1.17.1",
+    "express": "4.15.2",
+    "junit": "1.4.9",
+    "koa": "2.2.0",
+    "nokit": "0.23.24",
     "path-to-regexp": "1.7.0",
-    "send": "0.14.1",
-    "ts-node": "2.0.0",
-    "tslint": "4.2.0",
-    "typescript": "2.1.4"
+    "send": "0.15.1",
+    "tslint": "4.5.1",
+    "typescript": "2.2.2"
   },
   "typings": "lib/index.d.ts"
 }
