@@ -6,8 +6,7 @@
   "scripts": {
     "no": "no",
     "test": "no test",
-    "prepublish": "no build",
-    "postinstall": "tsc"
+    "prepublish": "no build"
   },
   "nofile": {
     "autoInstallDeps": true

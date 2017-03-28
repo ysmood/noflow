@@ -1,6 +1,6 @@
-import * as kit from "nokit"
+var kit = require("nokit")
 
-export = (task, option) => {
+module.exports = (task, option) => {
 
     option("-n, --name <examples/basic>", "example file name", "examples/basic");
     option("-g, --grep <.*>", "unit test regex filter", ".*");
