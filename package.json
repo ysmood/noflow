@@ -37,19 +37,19 @@
   },
   "homepage": "https://github.com/ysmood/noflow",
   "dependencies": {
-    "yaku": "0.17.9"
+    "yaku": "0.18.2"
   },
   "devDependencies": {
-    "@types/node": "7.0.12",
-    "body-parser": "1.17.1",
-    "cookie-session": "^2.0.0-beta.1",
-    "express": "4.15.2",
+    "@types/node": "8.0.16",
+    "body-parser": "1.17.2",
+    "cookie-session": "^2.0.0-beta.2",
+    "express": "4.15.3",
     "junit": "1.4.9",
-    "koa": "2.2.0",
-    "nokit": "0.23.24",
+    "koa": "2.3.0",
+    "nokit": "0.24.5",
     "path-to-regexp": "1.7.0",
-    "send": "0.15.1",
-    "tslint": "4.5.1",
-    "typescript": "2.2.2"
+    "send": "0.15.3",
+    "tslint": "5.5.0",
+    "typescript": "2.4.2"
   }
 }
